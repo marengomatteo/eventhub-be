@@ -16,8 +16,6 @@ RUN ./mvnw install -DskipTests
 FROM amazoncorretto:23-alpine-jdk
 VOLUME /tmp
 
-
-
 # Copia il jar dall'immagine di build
 COPY --from=build /workspace/app/target/*.jar app.jar
 
