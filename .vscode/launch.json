@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Microservizio utenti",
+      "request": "launch",
+      "mainClass": "com.eventhub.utenti_service.UtentiServiceApplication",
+      "projectName": "utenti-service",
+      "vmArgs": "-Dspring.profiles.active=h2"
+    }
+  ]
+}

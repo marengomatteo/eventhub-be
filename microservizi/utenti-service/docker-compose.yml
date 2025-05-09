@@ -9,6 +9,7 @@ services:
       - springdoc.swagger-ui.path=/swagger-ui.html
       - springdoc.swagger-ui.disable-swagger-default-url=true
       - spring.datasource.url=jdbc:mariadb://mariadb:3306/utenti_db?useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=30000
+      - spring.profiles.active=docker
     networks:
       - microservices-network
   mariadb:
