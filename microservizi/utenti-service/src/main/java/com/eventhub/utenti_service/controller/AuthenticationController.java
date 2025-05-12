@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.eventhub.utenti_service.dto.login.GoogleAuthRequest;
+import com.eventhub.utenti_service.dto.login.GoogleTokenResponse;
+import com.eventhub.utenti_service.dto.login.GoogleUserInfo;
 import com.eventhub.utenti_service.dto.login.LoginRequest;
 import com.eventhub.utenti_service.dto.login.UserDataResponse;
 import com.eventhub.utenti_service.dto.signup.SignUpRequest;
@@ -18,6 +21,7 @@ import com.eventhub.utenti_service.entities.RefreshToken;
 import com.eventhub.utenti_service.entities.Utente;
 import com.eventhub.utenti_service.mapper.UtenteMapper;
 import com.eventhub.utenti_service.service.AuthenticationService;
+import com.eventhub.utenti_service.service.GoogleService;
 import com.eventhub.utenti_service.service.JwtService;
 import com.eventhub.utenti_service.service.RefreshTokenService;
 
@@ -28,15 +32,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("authentication")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
+    private final GoogleService googleService;
 
     private final UtenteMapper utenteMapper;
 
@@ -79,6 +86,26 @@ public class AuthenticationController {
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(e.getStatusCode(), e.getReason());
         }
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<String> authenticateWithGoogle(@RequestBody GoogleAuthRequest request) {
+
+        log.info(request.getCode());
+
+        GoogleTokenResponse tokenResponse = googleService.exchangeCodeForToken(request.getCode());
+
+        // Ottieni informazioni utente da Google
+        GoogleUserInfo userInfo = googleService.getUserInfo(tokenResponse.getAccessToken());
+
+        log.info("");
+        // Crea o aggiorna utente nel tuo database
+        // UserDetails user = userService.processGoogleUser(userInfo);
+
+        // Genera JWT token per la tua applicazione
+        // String token = userService.generateJwtToken(user);
+
+        return ResponseEntity.ok("");
     }
 
 }

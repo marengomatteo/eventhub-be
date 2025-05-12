@@ -19,7 +19,7 @@ VOLUME /tmp
 # Copia il jar dall'immagine di build
 COPY --from=build /workspace/app/target/*.jar app.jar
 
-# Espone la porta 8081
+# Espone la porta 8080
 EXPOSE 8080
 
 # Esegue l'applicazione
