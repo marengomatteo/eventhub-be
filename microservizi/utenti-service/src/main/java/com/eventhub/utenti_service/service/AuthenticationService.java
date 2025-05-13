@@ -1,14 +1,20 @@
 package com.eventhub.utenti_service.service;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.eventhub.utenti_service.dto.login.GoogleUserInfo;
 import com.eventhub.utenti_service.dto.login.LoginRequest;
 import com.eventhub.utenti_service.dto.signup.SignUpRequest;
 import com.eventhub.utenti_service.entities.EProvider;
@@ -109,6 +115,66 @@ public class AuthenticationService {
                     "Login fallito. Email o password invalide");
         } catch (DataAccessException e) {
             log.error("{} Errore durante l'autenticazione dell'utente {}", "login", loginRequest.getEmail());
+            log.error("{}: {}", "login", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "RESPONSE_STATUS.INTERNAL_SERVER_ERROR");
+        }
+    }
+
+    @Transactional
+    public Utente processGoogleUser(GoogleUserInfo userInfo) {
+        try {
+            if (!userExists(userInfo.getEmail())) {
+                Utente u = createGoogleUser(userInfo);
+                return utenteRepository.save(u);
+            } else {
+                return loadUserByUsername(userInfo.getEmail());
+            }
+        } catch (DataAccessException e) {
+            log.error("{} Errore durante l'autenticazione dell'utente {}", "login", userInfo.getEmail());
+            log.error("{}: {}", "login", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "RESPONSE_STATUS.INTERNAL_SERVER_ERROR");
+        }
+
+    }
+
+    private Utente createGoogleUser(GoogleUserInfo userInfo) {
+        Utente u = new Utente();
+        u.setEmail(userInfo.getEmail());
+        String[] userInfoName = userInfo.getName().split(" ");
+        u.setName(userInfoName[0]);
+        u.setSurname(userInfoName[1]);
+        u.setPassword(null);
+        u.setRole(ERole.USER);
+        u.setProvider(EProvider.GOOGLE);
+
+        return u;
+    }
+
+    public boolean authenticationGoogleUser(Utente user) {
+        try {
+            List<GrantedAuthority> authorities = Collections
+                    .singletonList(new SimpleGrantedAuthority(user.getRole().toString()));
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(),
+                    authorities);
+
+            if (authentication.isAuthenticated()) {
+                log.info("{} Utente autenticato correttamente: {}", "login", user.getEmail());
+                return true;
+            } else {
+                log.error("{} Fallita autenticazione per utente con email {}", "login", user.getEmail());
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "RESPONSE_STATUS.UNAUTHORIZED_CREDENTIAL");
+            }
+
+        } catch (BadCredentialsException bce) {
+            log.error("{} Errore durante l'autenticazione dell'utente {}", "login", user.getEmail());
+            log.error("{}: ", "login", bce);
+            throw new BadCredentialsException(
+                    "Login fallito. Email o password invalide");
+        } catch (DataAccessException e) {
+            log.error("{} Errore durante l'autenticazione dell'utente {}", "login", user.getEmail());
             log.error("{}: {}", "login", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "RESPONSE_STATUS.INTERNAL_SERVER_ERROR");
