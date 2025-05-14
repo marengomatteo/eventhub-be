@@ -89,23 +89,33 @@ public class AuthenticationController {
     }
 
     @PostMapping("/google")
-    public ResponseEntity<String> authenticateWithGoogle(@RequestBody GoogleAuthRequest request) {
-
-        log.info(request.getCode());
+    public ResponseEntity<UserDataResponse> authenticateWithGoogle(@RequestBody GoogleAuthRequest request) {
 
         GoogleTokenResponse tokenResponse = googleService.exchangeCodeForToken(request.getCode());
 
-        // Ottieni informazioni utente da Google
         GoogleUserInfo userInfo = googleService.getUserInfo(tokenResponse.getAccessToken());
 
-        log.info("");
-        // Crea o aggiorna utente nel tuo database
-        // UserDetails user = userService.processGoogleUser(userInfo);
+        Utente user = authenticationService.processGoogleUser(userInfo);
 
-        // Genera JWT token per la tua applicazione
-        // String token = userService.generateJwtToken(user);
+        Boolean result = authenticationService.authenticationGoogleUser(user);
 
-        return ResponseEntity.ok("");
+        if (!result) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Utente non autenticato!");
+        }
+
+        ResponseCookie accessToken = jwtService.generateJwtCookie(user);
+
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+
+        ResponseCookie jwtRefreshCookie = jwtService.generateRefreshJwtCookie(refreshToken.getToken());
+
+        UserDataResponse response = utenteMapper.convert(user);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, accessToken.toString())
+                .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
+                .body(response);
+
     }
 
 }
