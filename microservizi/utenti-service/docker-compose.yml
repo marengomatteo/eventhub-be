@@ -10,8 +10,13 @@ services:
       - springdoc.swagger-ui.disable-swagger-default-url=true
       - spring.datasource.url=jdbc:mariadb://mariadb:3306/utenti_db?useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=30000
       - spring.profiles.active=docker
+      - spring.rabbitmq.host=rabbitmq
+      - spring.rabbitmq.port=5672
+      - spring.rabbitmq.username=guest
+      - spring.rabbitmq.password=guest
     networks:
       - microservices-network
+
   mariadb:
     image: mariadb:10.11
     ports:
@@ -42,9 +47,29 @@ services:
       retries: 5
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"    
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 networks:
   microservices-network:
     driver: bridge
 
 volumes:
   mariadb-data:
+  rabbitmq-data:

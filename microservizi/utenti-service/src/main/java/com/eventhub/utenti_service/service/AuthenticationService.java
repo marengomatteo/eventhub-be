@@ -3,6 +3,7 @@ package com.eventhub.utenti_service.service;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,8 +15,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.eventhub.utenti_service.configuration.RabbitMQConfig;
 import com.eventhub.utenti_service.dto.login.GoogleUserInfo;
 import com.eventhub.utenti_service.dto.login.LoginRequest;
+import com.eventhub.utenti_service.dto.rabbit.UserEventRegistration;
+import com.eventhub.utenti_service.dto.rabbit.UserRegistration;
 import com.eventhub.utenti_service.dto.signup.SignUpRequest;
 import com.eventhub.utenti_service.entities.EProvider;
 import com.eventhub.utenti_service.entities.ERole;
@@ -38,6 +42,8 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
     private final PasswordHasher passwordHasher;
+
+    private final RabbitTemplate rabbitTemplate;
 
     @Transactional
     public boolean userExists(String email) {
@@ -79,6 +85,27 @@ public class AuthenticationService {
             }
 
             Utente savedUtente = utenteRepository.save(u);
+
+            log.debug("Creazione del DTO per il messaggio");
+            // Creazione del DTO per il messaggio
+            UserRegistration userMessageDto = new UserRegistration(
+                savedUtente.getId(),
+                savedUtente.getName(),
+                savedUtente.getSurname(),
+                savedUtente.getEmail()
+            );
+
+            log.debug("Creazione del payload dell'evento");
+            // Creazione del payload dell'evento
+            UserEventRegistration event = new UserEventRegistration(userMessageDto, "REGISTRATION");
+            
+            log.debug("Pubblicazione dell'evento su RabbitMQ");
+            // Pubblicazione dell'evento su RabbitMQ
+            rabbitTemplate.convertAndSend(
+                RabbitMQConfig.EXCHANGE_NAME, 
+                RabbitMQConfig.ROUTING_KEY, 
+                event
+            );
 
             return savedUtente.getId().toString();
 
