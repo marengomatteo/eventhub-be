@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "MailServiceApplication",
+      "request": "launch",
+      "mainClass": "com.eventhub.mail_service.MailServiceApplication",
+      "projectName": "mail_service"
+    },
+    {
+      "type": "java",
       "name": "Microservizio utenti",
       "request": "launch",
       "mainClass": "com.eventhub.utenti_service.UtentiServiceApplication",

@@ -15,10 +15,12 @@ services:
       - spring.rabbitmq.username=guest
       - spring.rabbitmq.password=guest
     networks:
-      - microservices-network
+      - users-network
+      - rabbitmq-network
 
   mariadb:
     image: mariadb:10.11
+    container_name: mariadb
     ports:
       - "3306:3306"
     environment:
@@ -29,19 +31,9 @@ services:
     volumes:
       - mariadb-data:/var/lib/mysql
     networks:
-      - microservices-network
+      - users-network
     healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-p$MARIADB_ROOT_PASSWORD",
-        ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MARIADB_ROOT_PASSWORD"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -59,7 +51,8 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
-      - microservices-network
+      - users-network
+      - rabbitmq-network
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
       interval: 10s
@@ -67,9 +60,14 @@ services:
       retries: 5
 
 networks:
-  microservices-network:
+  users-network:
+    name: users-network
     driver: bridge
-
+  rabbitmq-network:
+    name: rabbitmq-network
+    driver: bridge
+    
 volumes:
   mariadb-data:
   rabbitmq-data:
+    name: rabbitmq-data

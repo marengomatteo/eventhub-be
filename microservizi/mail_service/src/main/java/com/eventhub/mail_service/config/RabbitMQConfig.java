@@ -1,4 +1,4 @@
-package com.eventhub.utenti_service.configuration;
+package com.eventhub.mail_service.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
