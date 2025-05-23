@@ -15,14 +15,6 @@
       "mainClass": "com.eventhub.utenti_service.UtentiServiceApplication",
       "projectName": "utenti-service",
       "vmArgs": "-Dspring.profiles.active=h2"
-    },
-    {
-      "type": "java",
-      "name": "Microservizio mail",
-      "request": "launch",
-      "mainClass": "com.eventhub.mail_service.MailServiceApplication",
-      "projectName": "mail-service",
-      "vmArgs": "-Dspring.profiles.active=h2"
     }
   ]
 }

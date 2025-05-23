@@ -1,33 +1,29 @@
 package com.eventhub.mail_service.controller;
 
-import java.util.UUID;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.eventhub.mail_service.service.MailService;
 import com.eventhub.mail_service.dto.EmailRequest;
-// import lombok.RequiredArgsConstructor;
+import com.eventhub.mail_service.service.EmailSenderService;
 
-// @RequiredArgsConstructor
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/email")
 public class MailController {
 
-    @Autowired
-    private MailService mailService;
+    private final EmailSenderService mailService;
 
     @PostMapping("/test")
-    public void testEmail(@RequestBody EmailRequest request) {
-        mailService.sendSimpleEmail(request.getTo(), "benvenuto su eventHub", "sei registrato");
+    public void testTicketEmail(@RequestBody EmailRequest request) {
+        EmailRequest er = new EmailRequest(request.getTo(), request.getSubject(),
+                request.getBody(), request.getSource(), Optional.empty(), request.getTemplateData());
+        mailService.sendEmail(er);
     }
 
-    @PostMapping("/ticketTest")
-    public void testEmailTicket(@RequestBody EmailRequest request) {
-        String ticketId = UUID.randomUUID().toString();
-        mailService.sendEmailWithAttachment(request.getTo(), "Ticket", "biglietto", ticketId);
-    }
 }
