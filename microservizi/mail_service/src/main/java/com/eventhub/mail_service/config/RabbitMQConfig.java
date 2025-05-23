@@ -13,9 +13,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String EXCHANGE_NAME = "user-exchange";
+    public static final String ROUTING_KEY_USER_TO_EMAIL = "email.from.user";
+    public static final String ROUTING_KEY_EVENT_TO_EMAIL = "email.from.event";
+
+    public static final String EXCHANGE_NAME = "email-exchange";
     public static final String QUEUE_NAME = "email-queue";
-    public static final String ROUTING_KEY = "user.registration";
 
     @Bean
     public TopicExchange exchange() {
@@ -29,7 +31,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+        return BindingBuilder.bind(queue).to(exchange).with("email.from.*");
     }
 
     @Bean

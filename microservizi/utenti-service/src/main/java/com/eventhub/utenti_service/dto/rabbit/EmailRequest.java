@@ -1,4 +1,4 @@
-package com.eventhub.mail_service.dto;
+package com.eventhub.utenti_service.dto.rabbit;
 
 import java.io.Serializable;
 import java.util.Map;
