@@ -1,5 +1,22 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: eventhub-gateway
+# microservices routes
 routes:
   services:
-    email: http://localhost:8081
-    get: http://httpbin.org
+    user-service: http://localhost:8080
+    email-service: http://localhost:8081
 
+# Swagger configuration
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs
