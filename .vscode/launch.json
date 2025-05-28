@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "GatewayApplication",
+      "request": "launch",
+      "mainClass": "com.eventhub.gateway.GatewayApplication",
+      "projectName": "gateway_service"
+    },
+    {
+      "type": "java",
       "name": "MailServiceApplication",
       "request": "launch",
       "mainClass": "com.eventhub.mail_service.MailServiceApplication",
