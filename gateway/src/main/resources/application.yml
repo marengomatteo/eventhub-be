@@ -1,0 +1,5 @@
+routes:
+  services:
+    email: http://localhost:8081
+    get: http://httpbin.org
+
