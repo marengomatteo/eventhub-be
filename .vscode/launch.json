@@ -5,8 +5,7 @@
       "type": "java",
       "name": "GatewayApplication",
       "request": "launch",
-      "mainClass": "com.eventhub.gateway.GatewayApplication",
-      "projectName": "gateway_service"
+      "mainClass": "com.eventhub.gateway.GatewayApplication"
     },
     {
       "type": "java",

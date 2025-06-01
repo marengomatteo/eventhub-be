@@ -4,11 +4,21 @@ server:
 spring:
   application:
     name: eventhub-gateway
-# microservices routes
-routes:
-  services:
-    user-service: http://localhost:8080
-    email-service: http://localhost:8081
+  cloud:
+    gateway:
+      routes:
+        - id: user-service-route
+          uri: http://localhost:8080
+          predicates:
+            - Path=/user-service/**
+          filters:
+            - StripPrefix=1
+        - id: email-service-route
+          uri: http://localhost:8081
+          predicates:
+            - Path=/email-service/**
+          filters:
+            - StripPrefix=1
 
 # Swagger configuration
 springdoc:
@@ -20,3 +30,20 @@ springdoc:
     path: /swagger-ui.html
     config-url: /v3/api-docs/swagger-config
     url: /v3/api-docs
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway.filter: TRACE
+    org.springframework.cloud.gateway.handler: DEBUG
+    org.springframework.cloud.gateway.route: DEBUG
+    reactor.netty.http.client: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway
+  endpoint:
+    gateway:
+      enabled: true
