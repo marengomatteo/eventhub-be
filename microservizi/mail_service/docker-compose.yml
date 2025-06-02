@@ -3,7 +3,7 @@ services:
     build: .
     container_name: mail-microservice
     ports:
-      - "8081:8080"
+      - "8081:8081"
     environment:
       - springdoc.api-docs.path=/v3/api-docs
       - springdoc.swagger-ui.path=/swagger-ui.html
