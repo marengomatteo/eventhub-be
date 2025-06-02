@@ -1,8 +1,6 @@
 package com.eventhub.utenti_service.controller;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +13,7 @@ import com.eventhub.utenti_service.dto.login.GoogleAuthRequest;
 import com.eventhub.utenti_service.dto.login.GoogleTokenResponse;
 import com.eventhub.utenti_service.dto.login.GoogleUserInfo;
 import com.eventhub.utenti_service.dto.login.LoginRequest;
+import com.eventhub.utenti_service.dto.login.LoginResponse;
 import com.eventhub.utenti_service.dto.login.UserDataResponse;
 import com.eventhub.utenti_service.dto.signup.SignUpRequest;
 import com.eventhub.utenti_service.entities.RefreshToken;
@@ -66,22 +65,21 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "500", description = "Errore sul database", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/signin")
-    public ResponseEntity<UserDataResponse> login(@RequestBody LoginRequest loginRequest,
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest,
             HttpServletRequest request) {
         try {
             Utente authenticatedUser = authenticationService.login(loginRequest);
 
-            ResponseCookie accessToken = jwtService.generateJwtCookie(authenticatedUser);
+            String accessToken = jwtService.generateJwtCookie(authenticatedUser);
 
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(authenticatedUser);
 
-            ResponseCookie jwtRefreshCookie = jwtService.generateRefreshJwtCookie(refreshToken.getToken());
+            String jwtRefreshCookie = refreshToken.getToken();
 
-            UserDataResponse response = utenteMapper.convert(authenticatedUser);
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, accessToken.toString())
-                    .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
-                    .body(response);
+            UserDataResponse userDataResponse = utenteMapper.convert(authenticatedUser);
+            LoginResponse response = new LoginResponse(userDataResponse, accessToken, jwtRefreshCookie);
+
+            return ResponseEntity.ok().body(response);
 
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(e.getStatusCode(), e.getReason());
@@ -89,7 +87,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/google")
-    public ResponseEntity<UserDataResponse> authenticateWithGoogle(@RequestBody GoogleAuthRequest request) {
+    public ResponseEntity<LoginResponse> authenticateWithGoogle(@RequestBody GoogleAuthRequest request) {
 
         GoogleTokenResponse tokenResponse = googleService.exchangeCodeForToken(request.getCode());
 
@@ -104,17 +102,16 @@ public class AuthenticationController {
                     "Utente non autenticato!");
         }
 
-        ResponseCookie accessToken = jwtService.generateJwtCookie(user);
+        String accessToken = jwtService.generateJwtCookie(user);
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
-        ResponseCookie jwtRefreshCookie = jwtService.generateRefreshJwtCookie(refreshToken.getToken());
+        String jwtRefreshCookie = refreshToken.getToken();
 
-        UserDataResponse response = utenteMapper.convert(user);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, accessToken.toString())
-                .header(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString())
-                .body(response);
+        UserDataResponse userDataResponse = utenteMapper.convert(user);
+        LoginResponse response = new LoginResponse(userDataResponse, accessToken, jwtRefreshCookie);
+
+        return ResponseEntity.ok().body(response);
 
     }
 
