@@ -21,6 +21,14 @@
       "mainClass": "com.eventhub.utenti_service.UtentiServiceApplication",
       "projectName": "utenti-service",
       "vmArgs": "-Dspring.profiles.active=h2"
+    },
+    {
+      "type": "java",
+      "name": "Microservizio eventi",
+      "request": "launch",
+      "mainClass": "com.eventhub.event_service.EventServiceApplication",
+      "projectName": "event-service",
+      "vmArgs": "-Dspring.profiles.active=h2"
     }
   ]
 }
