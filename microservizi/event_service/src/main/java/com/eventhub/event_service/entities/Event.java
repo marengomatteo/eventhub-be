@@ -1,69 +1,59 @@
 package com.eventhub.event_service.entities;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Document(collection = "event")
 @Data
-@Entity(name = "event")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Event {
 
     @Id
-    @UuidGenerator
-    private UUID id;
+    private String id;
 
-    @Column(nullable = false)
+    @Field
     private String eventName;
 
-    @Column(nullable = false)
-    private String date; //TODO: come gestiiamo se è un evento che copre piu' giorni?
+    @Field
+    private String startDate;
 
-    @Column(nullable = false)
+    @Field
+    private String endDate;
+
+    @Field
     private String time;
 
-    @Column(nullable = false)
+    @Field
     private String location;
 
-    @Column(nullable = true)
+    @Field
     private String description;
 
-    @Column(nullable = false)
+    @Field
     private String maxPartecipants;
 
     // @Column(nullable = false)
     // private List partecipantsList; // lista di utenti che partecipano all'evento
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private String event_type; // concerto/conferenza/altro  
+    @Field
+    private String eventType; // concerto/conferenza/altro
 
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
+    @CreatedDate
+    @Field("created_at")
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
+    @LastModifiedDate
+    @Field("updated_at")
     private LocalDateTime updatedAt;
 
-    // @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    // private List<RefreshToken> refreshTokens;
-
-    // @Override
-    // public Collection<? extends GrantedAuthority> getAuthorities() {
-    //     return Collections.singletonList(
-    //             new SimpleGrantedAuthority(this.role.name()));
-    // }
 }

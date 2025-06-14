@@ -14,7 +14,7 @@ public class SwaggerConfiguration {
         return new OpenAPI()
                 .info(new Info().title("Eventhub BE")
                         .version("1.0")
-                        .description("Eventhub BE - microservizio eventi"));
+                        .description("Eventhub BE - microservizio email"));
     }
 
 }
