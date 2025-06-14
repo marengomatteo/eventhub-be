@@ -1,7 +1,7 @@
 package com.eventhub.event_service.entities;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -43,11 +43,11 @@ public class Event {
     @Field
     private int maxPartecipants;
 
-    // @Column(nullable = false)
-    // private List partecipantsList; // lista di utenti che partecipano all'evento
+    @Field
+    private List<Participant> partecipantsList;
 
     @Field
-    private Optional<String> eventType; // concerto/conferenza/altro
+    private String eventType; // concerto/conferenza/altro
 
     @CreatedDate
     @Field("created_at")
