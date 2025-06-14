@@ -11,9 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EventRequest {
 
+    private String id; 
+    
     private String eventName;
 
-    private String date;
+    private String startDate;
+
+    private String endDate;
 
     private String time;
 
