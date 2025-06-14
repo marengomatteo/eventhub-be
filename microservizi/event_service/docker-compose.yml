@@ -1,0 +1,37 @@
+services:
+  event-service:
+    build: .
+    container_name: event-microservice
+    ports:
+      - "8083:8083"
+    environment:
+      - springdoc.api-docs.path=/v3/api-docs
+      - springdoc.swagger-ui.path=/swagger-ui.html
+      - springdoc.swagger-ui.disable-swagger-default-url=true
+      - springdoc.swagger-ui.server-url=http://localhost:8083
+      - spring.data.mongodb.database=event_service
+      - spring.data.mongodb.uri=mongodb://mongodb:27017/event_service
+    depends_on:
+      - mongodb
+    networks:
+      - event-network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: event-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=event_service
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - event-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  event-network:
+    name: event-network
+    driver: bridge
