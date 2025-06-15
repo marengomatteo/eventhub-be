@@ -19,8 +19,8 @@ VOLUME /tmp
 # Copia il jar dall'immagine di build
 COPY --from=build /workspace/app/target/*.jar app.jar
 
-# Espone la porta 8081
-EXPOSE 8081
+# Espone la porta 8083
+EXPOSE 8083
 
 # Esegue l'applicazione
 ENTRYPOINT ["java","-jar","/app.jar"]
