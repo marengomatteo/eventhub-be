@@ -1,14 +1,19 @@
 package com.eventhub.event_service.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.eventhub.event_service.config.RabbitMQConfig;
 import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
+import com.eventhub.event_service.dto.rabbit.EmailRequest;
 import com.eventhub.event_service.entities.Event;
 import com.eventhub.event_service.entities.Participant;
 import com.eventhub.event_service.mapper.EventMapper;
@@ -24,6 +29,9 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+
+    private final RabbitTemplate rabbitTemplate;
+
 
     public List<EventResponse> getAllEvents() {
         try {
@@ -77,6 +85,28 @@ public class EventService {
     @Transactional
     public void deleteEvent(String id) {
         try {
+            Event event = eventRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Event not found while deleting"));
+
+            List<Participant> partecipantsList = event.getPartecipantsList();
+            String eventName = event.getEventName();
+
+            if (partecipantsList != null && !partecipantsList.isEmpty()) {
+                
+                for(int i=0; i<partecipantsList.size(); i++) {
+                    Participant p = partecipantsList.get(i);
+                    String subject = "Evento cancellato";
+                    String body = "L'evento {} a cui ti sei iscritto è stato cancellato."
+                            .formatted(eventName);
+                            
+                    EmailRequest er = new EmailRequest(p.getEmail(), subject, body, "USER", Optional.empty(),
+                            new HashMap<>());
+                    rabbitTemplate.convertAndSend(
+                            RabbitMQConfig.EXCHANGE_NAME,
+                            RabbitMQConfig.ROUTING_KEY,
+                            er);
+                }
+            }
             eventRepository.deleteById(id);
         } catch (Exception e) {
             log.error("Error deleting event {}: ", id, e);
