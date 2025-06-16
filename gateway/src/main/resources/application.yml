@@ -34,6 +34,13 @@ spring:
             - Path=/email-service/**
           filters:
             - StripPrefix=1
+        - id: event-service-route
+          uri: http://localhost:8083
+          predicates:
+            - Path=/event-service/**
+          filters:
+            - StripPrefix=1
+            - Authentication
 
 # Swagger configuration
 springdoc:
