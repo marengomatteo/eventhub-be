@@ -14,10 +14,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "sessioni")
+@Entity(name = "sessione")
 @NoArgsConstructor
-public class Session {
-    
+public class Sessione {
+
     @Id
     @UuidGenerator
     private UUID id;
@@ -27,7 +27,7 @@ public class Session {
 
     @Column(nullable = false)
     private String title;
-    
+
     @Column(nullable = true)
     private String location;
 

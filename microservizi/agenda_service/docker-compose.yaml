@@ -8,23 +8,23 @@ services:
       - springdoc.api-docs.path=/v3/api-docs
       - springdoc.swagger-ui.path=/swagger-ui.html
       - springdoc.swagger-ui.disable-swagger-default-url=true
-      # - spring.datasource.url=jdbc:mariadb://mariadb:3306/agenda_db?useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=30000
-      - spring.profiles.active=docker
-      - spring.rabbitmq.host=agenda-rabbitmq
-      - spring.rabbitmq.port=5674
-      - spring.rabbitmq.username=guest
-      - spring.rabbitmq.password=guest
+      - spring.datasource.url=jdbc:mariadb://mariadb:3307/agenda_db?useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=30000
+      - spring.datasource.hikari.connection-timeout=30000
+      - spring.datasource.hikari.maximum-pool-size=10
+      - spring.datasource.hikari.minimum-idle=2
     networks:
       - agenda-network
-      - rabbitmq-network
+    depends_on:
+      mariadb:
+        condition: service_healthy
 
   mariadb:
     image: mariadb:10.11
-    container_name: mariadb
+    container_name: mariadb-agenda
     ports:
-      - "3306:3306"
+      - "3307:3307"
     environment:
-      - MARIADB_DATABASE=utenti_db
+      - MARIADB_DATABASE=agenda_db
       - MARIADB_USER=username
       - MARIADB_PASSWORD=password
       - MARIADB_ROOT_PASSWORD=rootpassword
@@ -33,41 +33,27 @@ services:
     networks:
       - agenda-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MARIADB_ROOT_PASSWORD"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-
-  agenda-rabbitmq:
-    image: rabbitmq:3-management
-    container_name: agenda-rabbitmq
-    ports:
-      - "5674:5674"    
-      - "15674:15674"
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
-    networks:
-      - agenda-network
-      - rabbitmq-network
-    healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p$MARIADB_ROOT_PASSWORD",
+          "--port=3307",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --port=3307
 
 networks:
   agenda-network:
     name: agenda-network
     driver: bridge
-  rabbitmq-network:
-    name: rabbitmq-network
-    driver: bridge
-    
+
 volumes:
   mariadb-data:
-  rabbitmq-data:
-    name: rabbitmq-data
