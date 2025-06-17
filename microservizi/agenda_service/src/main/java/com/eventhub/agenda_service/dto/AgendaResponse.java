@@ -1,15 +1,16 @@
 package com.eventhub.agenda_service.dto;
 
-import lombok.AllArgsConstructor;
+import java.util.List;
+
+import com.eventhub.agenda_service.entities.Session;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class AgendaResponse {
 
     private String id;
     private String eventName;
+    private List<Session> sessionsList; 
 
 }

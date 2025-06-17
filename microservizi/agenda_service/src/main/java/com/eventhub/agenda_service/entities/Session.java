@@ -1,7 +1,6 @@
 package com.eventhub.agenda_service.entities;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,21 +13,32 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
-@Entity(name = "agenda")
+@Entity(name = "sessioni")
 @NoArgsConstructor
-public class Agenda {
+public class Session {
     
     @Id
     @UuidGenerator
     private UUID id;
 
     @Column(nullable = false)
-    private String eventName;
+    private String speaker;
 
     @Column(nullable = false)
-    private List<Session> sessionsList;
+    private String title;
+    
+    @Column(nullable = true)
+    private String location;
+
+    @Column(nullable = false)
+    private String description;
+
+    @Column(nullable = false)
+    private String startTime;
+
+    @Column(nullable = false)
+    private String endTime;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
