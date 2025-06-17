@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eventhub.agenda_service.dto.AgendaRequest;
 import com.eventhub.agenda_service.dto.AgendaResponse;
 import com.eventhub.agenda_service.service.AgendaService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-@RestController 
+
+@RestController
 @RequestMapping("/agenda")
 @RequiredArgsConstructor
 @Slf4j
@@ -23,25 +25,29 @@ public class AgendaController {
 
     private final AgendaService agendaService;
 
-    @GetMapping("")
+    @GetMapping("/{id}")
     public ResponseEntity<AgendaResponse> getAgendaByEvent(@PathVariable("id") String id) {
         AgendaResponse agenda = agendaService.getAgendaByEvent(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(agenda);
     }
 
     @PostMapping("")
-    public void newAgenda(@RequestBody Object agendaRequest) {
-        return;
+    public ResponseEntity<String> newAgenda(@RequestBody AgendaRequest agendaRequest) {
+        String id = agendaService.newAgenda(agendaRequest);
+        return ResponseEntity.ok(id);
     }
 
     @PutMapping("/{id}")
-    public void updateAgenda(@PathVariable("id") String id) {
-        agendaService.updateAgenda(id);
+    public ResponseEntity<String> updateAgenda(@PathVariable("id") String id,
+            @RequestBody AgendaRequest agendaRequest) {
+        String data = agendaService.updateAgenda(id, agendaRequest);
+        return ResponseEntity.ok(data);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAgenda(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteAgenda(@PathVariable("id") String id) {
         agendaService.deleteAgenda(id);
+        return ResponseEntity.ok().build();
     }
-    
+
 }
