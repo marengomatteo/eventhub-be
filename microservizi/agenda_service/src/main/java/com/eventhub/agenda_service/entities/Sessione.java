@@ -3,49 +3,31 @@ package com.eventhub.agenda_service.entities;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.UuidGenerator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "sessione")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Sessione {
 
-    @Id
-    @UuidGenerator
-    private UUID id;
+    private String id = UUID.randomUUID().toString();
 
-    @Column(nullable = false)
     private String speaker;
 
-    @Column(nullable = false)
     private String title;
 
-    @Column(nullable = true)
     private String location;
 
-    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private String startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime startTime;
 
-    @Column(nullable = false)
-    private String endTime;
-
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime endTime;
 
 }

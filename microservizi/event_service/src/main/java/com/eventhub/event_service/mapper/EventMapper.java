@@ -15,6 +15,7 @@ public interface EventMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "partecipantsList", ignore = true)
     Event parse(EventRequest eventRequest);
 
     EventResponse convert(Event event);

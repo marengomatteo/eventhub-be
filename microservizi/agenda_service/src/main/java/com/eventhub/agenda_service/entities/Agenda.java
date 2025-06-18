@@ -1,39 +1,52 @@
 package com.eventhub.agenda_service.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity(name = "agenda")
+@Document(collection = "agenda")
 @NoArgsConstructor
+@AllArgsConstructor
+@CompoundIndex(def = "{'event_id': 1, 'created_at': -1}")
 public class Agenda {
 
     @Id
-    @UuidGenerator
-    private UUID id;
+    private String id;
 
-    @Column(nullable = false)
+    @Field("event_id")
     private String eventId;
 
-    // @Column(nullable = false)
-    // private List<Sessione> sessionsList;
+    @Field("event_name")
+    private String eventName;
 
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
+    @Field("day")
+    private LocalDate day;
+
+    @Field("sessions")
+    private List<Sessione> sessions = new ArrayList<>();
+
+    @CreatedDate
+    @Field("created_at")
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at")
+    @LastModifiedDate
+    @Field("updated_at")
     private LocalDateTime updatedAt;
 
+    @Version
+    private Long version;
 }
