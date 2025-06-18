@@ -1,5 +1,7 @@
 package com.eventhub.agenda_service.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +30,12 @@ public class AgendaController {
     @GetMapping("/{id}")
     public ResponseEntity<AgendaResponse> getAgendaByEvent(@PathVariable("id") String id) {
         AgendaResponse agenda = agendaService.getAgendaByEvent(id);
+        return ResponseEntity.ok(agenda);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<AgendaResponse>> getAllAgenda() {
+        List<AgendaResponse> agenda = agendaService.getAllAgendas();
         return ResponseEntity.ok(agenda);
     }
 
