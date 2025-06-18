@@ -8,8 +8,6 @@ import java.util.Optional;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.eventhub.event_service.config.RabbitMQConfig;
 import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
@@ -32,7 +30,6 @@ public class EventService {
 
     private final RabbitTemplate rabbitTemplate;
 
-
     public List<EventResponse> getAllEvents() {
         try {
             return eventMapper.convert(eventRepository.findAll());
@@ -42,7 +39,6 @@ public class EventService {
         }
     }
 
-    @Transactional
     public String newEvent(EventRequest request) {
         try {
             Event e = eventMapper.parse(request);
@@ -56,7 +52,6 @@ public class EventService {
         }
     }
 
-    @Transactional
     public void updateEvent(String id, EventRequest request) {
         try {
             Event event = eventRepository.findById(id).orElseThrow(() -> {
@@ -82,7 +77,6 @@ public class EventService {
         }
     }
 
-    @Transactional
     public void deleteEvent(String id) {
         try {
             Event event = eventRepository.findById(id)
@@ -92,13 +86,13 @@ public class EventService {
             String eventName = event.getEventName();
 
             if (partecipantsList != null && !partecipantsList.isEmpty()) {
-                
-                for(int i=0; i<partecipantsList.size(); i++) {
+
+                for (int i = 0; i < partecipantsList.size(); i++) {
                     Participant p = partecipantsList.get(i);
                     String subject = "Evento cancellato";
                     String body = "L'evento {} a cui ti sei iscritto è stato cancellato."
                             .formatted(eventName);
-                            
+
                     EmailRequest er = new EmailRequest(p.getEmail(), subject, body, "USER", Optional.empty(),
                             new HashMap<>());
                     rabbitTemplate.convertAndSend(
@@ -114,7 +108,6 @@ public class EventService {
         }
     }
 
-    @Transactional
     public void addParticipant(String id, Participant participant) {
         try {
             Event event = eventRepository.findById(id).orElseThrow(() -> {

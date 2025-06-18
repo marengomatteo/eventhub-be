@@ -1,7 +1,6 @@
 package com.eventhub.agenda_service.service;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -9,9 +8,9 @@ import org.springframework.stereotype.Service;
 import com.eventhub.agenda_service.dto.AgendaRequest;
 import com.eventhub.agenda_service.dto.AgendaResponse;
 import com.eventhub.agenda_service.entities.Agenda;
+import com.eventhub.agenda_service.mapper.AgendaMapper;
 import com.eventhub.agenda_service.repositories.AgendaRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,16 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 public class AgendaService {
 
     private final AgendaRepository agendaRepository;
+    private final AgendaMapper agendaMapper;
 
     public List<AgendaResponse> getAllAgendas() {
         try {
             List<Agenda> agenda = agendaRepository.findAll();
-            return agenda.stream().map(ag -> {
-                AgendaResponse agendaResponse = new AgendaResponse();
-                agendaResponse.setId(ag.getId());
-                agendaResponse.setEventId(ag.getEventId());
-                return agendaResponse;
-            }).toList();
+            return agenda.stream().map(ag -> agendaMapper.convert(ag)).toList();
         } catch (Exception e) {
             log.error("Error retrieving all agenda: {}", e.getMessage());
             throw new RuntimeException("Failed to retrieve agenda for event", e);
@@ -39,13 +34,11 @@ public class AgendaService {
 
     public AgendaResponse getAgendaByEvent(String id) {
         try {
-            Agenda agenda = agendaRepository.findById(UUID.fromString(id)).orElseThrow(() -> {
+            Agenda agenda = agendaRepository.findById(id).orElseThrow(() -> {
                 log.error("Agenda with event id {} not found", id);
                 throw new RuntimeException("Agenda not found");
             });
-            AgendaResponse agendaResponse = new AgendaResponse();
-            agendaResponse.setId(agenda.getId());
-            agendaResponse.setEventId(agenda.getEventId());
+            AgendaResponse agendaResponse = agendaMapper.convert(agenda);
 
             return agendaResponse;
         } catch (Exception e) {
@@ -54,11 +47,10 @@ public class AgendaService {
         }
     }
 
-    @Transactional
     public String newAgenda(AgendaRequest request) {
         try {
-            Agenda agenda = new Agenda();
-            agenda.setEventId(request.getEventId());
+            Agenda agenda = agendaMapper.parse(request);
+
             Agenda agendaSaved = agendaRepository.save(agenda);
             return agendaSaved.getId().toString();
 
@@ -68,11 +60,10 @@ public class AgendaService {
         }
     }
 
-    @Transactional
     public String updateAgenda(String id, AgendaRequest request) {
         try {
 
-            Agenda agenda = agendaRepository.findById(UUID.fromString(id)).orElseThrow(() -> {
+            Agenda agenda = agendaRepository.findById(id).orElseThrow(() -> {
                 log.error("Error creating new event: ");
                 throw new RuntimeException("Failed to create new event");
             });
@@ -87,10 +78,9 @@ public class AgendaService {
         }
     }
 
-    @Transactional
     public void deleteAgenda(String id) {
         try {
-            Agenda a = agendaRepository.findById(UUID.fromString(id)).orElseThrow(() -> {
+            Agenda a = agendaRepository.findById(id).orElseThrow(() -> {
                 log.error("Error creating new event: ");
                 throw new RuntimeException("Failed to create new event");
             });
