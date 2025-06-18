@@ -1,5 +1,6 @@
 package com.eventhub.agenda_service.dto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.eventhub.agenda_service.entities.Sessione;
@@ -16,5 +17,6 @@ public class AgendaResponse {
     private String id;
     private String eventId;
     private String eventName;
+    private LocalDate day;
     private List<Sessione> sessionsList;
 }
