@@ -1,5 +1,7 @@
 package com.eventhub.agenda_service.service;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -7,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.eventhub.agenda_service.dto.AgendaRequest;
 import com.eventhub.agenda_service.dto.AgendaResponse;
+import com.eventhub.agenda_service.dto.AgendaUpdateRequest;
 import com.eventhub.agenda_service.entities.Agenda;
+import com.eventhub.agenda_service.entities.Sessione;
 import com.eventhub.agenda_service.mapper.AgendaMapper;
 import com.eventhub.agenda_service.repositories.AgendaRepository;
 
@@ -60,21 +64,42 @@ public class AgendaService {
         }
     }
 
-    public String updateAgenda(String id, AgendaRequest request) {
+    public String updateAgenda(String id, AgendaUpdateRequest request) {
         try {
-
             Agenda agenda = agendaRepository.findById(id).orElseThrow(() -> {
-                log.error("Error creating new event: ");
-                throw new RuntimeException("Failed to create new event");
+                log.error("Agenda not found with id: {}", id);
+                throw new RuntimeException("Agenda not found with id: " + id);
             });
 
-            agenda.setEventId(request.getEventId());
+            LocalDate oldDay = agenda.getDay();
+            LocalDate newDay = request.getDay();
+
+            if (!oldDay.equals(newDay)) {
+                updateSessionsDates(agenda.getSessions(), oldDay, newDay);
+            }
+
+            agenda.setDay(newDay);
+
             Agenda agendaSaved = agendaRepository.save(agenda);
-            return agendaSaved.getId().toString();
+            return agendaSaved.getId();
 
         } catch (DataAccessException e) {
-            log.error("Error creating new event: ", e);
-            throw new RuntimeException("Failed to create new event", e);
+            log.error("Error updating agenda with id: {}", id, e);
+            throw new RuntimeException("Failed to update agenda", e);
+        }
+    }
+
+    private void updateSessionsDates(List<Sessione> sessions, LocalDate oldDay, LocalDate newDay) {
+        for (Sessione session : sessions) {
+            if (session.getStartTime() != null) {
+                LocalTime startTime = session.getStartTime().toLocalTime();
+                session.setStartTime(newDay.atTime(startTime));
+            }
+
+            if (session.getEndTime() != null) {
+                LocalTime endTime = session.getEndTime().toLocalTime();
+                session.setEndTime(newDay.atTime(endTime));
+            }
         }
     }
 
