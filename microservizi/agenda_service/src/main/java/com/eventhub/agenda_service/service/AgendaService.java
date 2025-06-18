@@ -1,5 +1,6 @@
 package com.eventhub.agenda_service.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.dao.DataAccessException;
@@ -20,6 +21,21 @@ import lombok.extern.slf4j.Slf4j;
 public class AgendaService {
 
     private final AgendaRepository agendaRepository;
+
+    public List<AgendaResponse> getAllAgendas() {
+        try {
+            List<Agenda> agenda = agendaRepository.findAll();
+            return agenda.stream().map(ag -> {
+                AgendaResponse agendaResponse = new AgendaResponse();
+                agendaResponse.setId(ag.getId());
+                agendaResponse.setEventId(ag.getEventId());
+                return agendaResponse;
+            }).toList();
+        } catch (Exception e) {
+            log.error("Error retrieving all agenda: {}", e.getMessage());
+            throw new RuntimeException("Failed to retrieve agenda for event", e);
+        }
+    }
 
     public AgendaResponse getAgendaByEvent(String id) {
         try {
