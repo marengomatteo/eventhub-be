@@ -57,8 +57,11 @@ public class EventService {
                     .setEventName(request.getEventName())
                     .build();
 
-            greeterClientService.creaAgenda(createAgendaRequest);
-
+            Integer value = greeterClientService.creaAgenda(createAgendaRequest);
+            if (value == 0) {
+                eventRepository.delete(esaved);
+                throw new RuntimeException("Failed to create new event");
+            }
             return esaved.getId();
         } catch (DataAccessException e) {
             log.error("Error creating new event: ", e);

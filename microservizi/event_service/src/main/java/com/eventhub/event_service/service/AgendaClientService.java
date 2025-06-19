@@ -14,7 +14,7 @@ public class AgendaClientService {
     @GrpcClient("agenda-service")
     private AgendaGrpc.AgendaBlockingStub agendaStub;
 
-    public String creaAgenda(CreateAgendaRequest request) {
+    public Integer creaAgenda(CreateAgendaRequest request) {
         try {
             CreateAgendaResponse response = agendaStub.createAgenda(request);
 
