@@ -2,9 +2,9 @@ package com.eventhub.event_service.service;
 
 import org.springframework.stereotype.Service;
 
-import com.eventhub.agenda_service.proto.GreeterGrpc;
-import com.eventhub.agenda_service.proto.HelloRequest;
-import com.eventhub.agenda_service.proto.HelloResponse;
+import com.eventhub.agenda_service.proto.AgendaGrpc;
+import com.eventhub.agenda_service.proto.CreateAgendaRequest;
+import com.eventhub.agenda_service.proto.CreateAgendaResponse;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 
@@ -12,15 +12,11 @@ import net.devh.boot.grpc.client.inject.GrpcClient;
 public class AgendaClientService {
 
     @GrpcClient("agenda-service")
-    private GreeterGrpc.GreeterBlockingStub agendaStub;
+    private AgendaGrpc.AgendaBlockingStub agendaStub;
 
-    public String chiamaAgenda(String parametro) {
+    public String creaAgenda(CreateAgendaRequest request) {
         try {
-            HelloRequest request = HelloRequest.newBuilder()
-                    .setName(parametro)
-                    .build();
-
-            HelloResponse response = agendaStub.sayHello(request);
+            CreateAgendaResponse response = agendaStub.createAgenda(request);
 
             return response.getMessage();
         } catch (Exception e) {

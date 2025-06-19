@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.eventhub.agenda_service.proto";
+
+service Agenda {
+  rpc createAgenda (CreateAgendaRequest) returns (CreateAgendaResponse);
+}
+message CreateAgendaRequest {
+  string eventId = 1;
+  string eventName = 2;
+  string day = 3;
+}
+
+message CreateAgendaResponse {
+  string message = 1;
+}
