@@ -13,5 +13,5 @@ message CreateAgendaRequest {
 }
 
 message CreateAgendaResponse {
-  string message = 1;
+  int32 message = 1;
 }

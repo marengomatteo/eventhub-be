@@ -29,15 +29,21 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
             agenda.setEventId(request.getEventId());
             agenda.setDay(stringToLocalDate(request.getDay()));
             agenda.setSessions(new ArrayList<>());
-            Agenda agendaSaved = agendaRepository.save(agenda);
+            agendaRepository.save(agenda);
 
             CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
-                    .setMessage("Agenda creata con successo: " + agendaSaved.getId())
+                    .setMessage(1)
                     .build();
 
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } catch (Exception e) {
+            CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
+                    .setMessage(0)
+                    .build();
+
+            responseObserver.onNext(reply);
+            responseObserver.onCompleted();
             throw new RuntimeException("errore");
         }
     }
