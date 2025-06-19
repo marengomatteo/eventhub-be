@@ -8,6 +8,8 @@ import java.util.Optional;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+
+import com.eventhub.agenda_service.proto.CreateAgendaRequest;
 import com.eventhub.event_service.config.RabbitMQConfig;
 import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
@@ -28,6 +30,8 @@ public class EventService {
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
 
+    private final AgendaClientService greeterClientService;
+
     private final RabbitTemplate rabbitTemplate;
 
     public List<EventResponse> getAllEvents() {
@@ -45,7 +49,15 @@ public class EventService {
             e.setPartecipantsList(new ArrayList<>());
             Event esaved = eventRepository.save(e);
 
-            //chiamata grpc ad agenda
+            // chiamata grpc ad agenda
+            CreateAgendaRequest createAgendaRequest = CreateAgendaRequest
+                    .newBuilder()
+                    .setDay(request.getStartDate())
+                    .setEventId(esaved.getId())
+                    .setEventName(request.getEventName())
+                    .build();
+
+            greeterClientService.creaAgenda(createAgendaRequest);
 
             return esaved.getId();
         } catch (DataAccessException e) {
