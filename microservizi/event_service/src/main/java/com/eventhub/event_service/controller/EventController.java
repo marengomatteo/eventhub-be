@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
 import com.eventhub.event_service.entities.Participant;
+import com.eventhub.event_service.service.AgendaClientService;
 import com.eventhub.event_service.service.EventService;
 
 import lombok.RequiredArgsConstructor;
@@ -55,5 +56,14 @@ public class EventController {
     @DeleteMapping("/{id}")
     public void deleteEvent(@PathVariable("id") String id) {
         eventService.deleteEvent(id);
+    }
+
+    private final AgendaClientService greeterClientService;
+
+    @GetMapping("/saluta")
+    public String saluta() {
+        String messaggio = greeterClientService.chiamaAgenda("PARAMETRO");
+
+        return "Risposta dall'agenda: " + messaggio;
     }
 }
