@@ -45,6 +45,8 @@ public class EventService {
             e.setPartecipantsList(new ArrayList<>());
             Event esaved = eventRepository.save(e);
 
+            //chiamata grpc ad agenda
+
             return esaved.getId();
         } catch (DataAccessException e) {
             log.error("Error creating new event: ", e);
