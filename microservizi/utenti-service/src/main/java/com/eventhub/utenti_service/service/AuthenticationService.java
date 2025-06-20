@@ -66,7 +66,7 @@ public class AuthenticationService {
             if (userExists(request.getEmail())) {
                 log.error("{}: Utente già presente a DB con questa email", "signupUser");
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "RESPONSE_STATUS.BAD_REQUEST");
+                        "Si è verificato un errore. Verifica i dati inseriti e riprova");
             }
 
             Utente u = utenteMapper.parse(request);
@@ -79,7 +79,7 @@ public class AuthenticationService {
                         request.getEmail());
                 if (request.getPassword() == null) {
                     throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                            "RESPONSE_STATUS.BAD_REQUEST");
+                            "Si è verificato un errore. Verifica i dati inseriti e riprova");
                 } else {
                     u.setPassword(passwordHasher.hashPassword(request.getPassword()));
                 }
@@ -107,7 +107,7 @@ public class AuthenticationService {
         } catch (DataAccessException e) {
             log.error("{} Errore durante il salvataggio dell'utente con email {}", "register", request.getEmail());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "RESPONSE_STATUS.INTERNAL_SERVER_ERROR");
+                    "Errore generico del server");
         }
     }
 
@@ -127,7 +127,7 @@ public class AuthenticationService {
                 return utente;
             } else {
                 log.error("{} Fallita autenticazione per utente con email {}", "login", loginRequest.getEmail());
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "RESPONSE_STATUS.UNAUTHORIZED_CREDENTIAL");
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenziali non corrette");
             }
 
         } catch (BadCredentialsException bce) {
@@ -138,8 +138,7 @@ public class AuthenticationService {
         } catch (DataAccessException e) {
             log.error("{} Errore durante l'autenticazione dell'utente {}", "login", loginRequest.getEmail());
             log.error("{}: {}", "login", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "RESPONSE_STATUS.INTERNAL_SERVER_ERROR");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore generico del server");
         }
     }
 
@@ -155,8 +154,8 @@ public class AuthenticationService {
         } catch (DataAccessException e) {
             log.error("{} Errore durante l'autenticazione dell'utente {}", "login", userInfo.getEmail());
             log.error("{}: {}", "login", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "RESPONSE_STATUS.INTERNAL_SERVER_ERROR");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore generico del server");
+
         }
 
     }
@@ -187,7 +186,7 @@ public class AuthenticationService {
                 return true;
             } else {
                 log.error("{} Fallita autenticazione per utente con email {}", "login", user.getEmail());
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "RESPONSE_STATUS.UNAUTHORIZED_CREDENTIAL");
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Credenziali non corrette");
             }
 
         } catch (BadCredentialsException bce) {
@@ -198,8 +197,7 @@ public class AuthenticationService {
         } catch (DataAccessException e) {
             log.error("{} Errore durante l'autenticazione dell'utente {}", "login", user.getEmail());
             log.error("{}: {}", "login", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "RESPONSE_STATUS.INTERNAL_SERVER_ERROR");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore generico del server");
         }
     }
 
