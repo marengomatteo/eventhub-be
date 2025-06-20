@@ -1,6 +1,5 @@
 package com.eventhub.event_service.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.eventhub.event_service.entities.Participant;
@@ -24,6 +23,5 @@ public class EventResponse {
     private List<Participant> partecipantsList;
     private int maxPartecipants;
     private String eventType;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 }
