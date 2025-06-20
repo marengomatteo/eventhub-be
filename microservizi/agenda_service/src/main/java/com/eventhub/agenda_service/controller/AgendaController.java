@@ -34,8 +34,8 @@ public class AgendaController {
     private final SessionService sessionService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<AgendaResponse> getAgendaByEvent(@PathVariable("id") String id) {
-        AgendaResponse agenda = agendaService.getAgendaByEvent(id);
+    public ResponseEntity<AgendaResponse> getAgendaByEvent(@PathVariable("id") String eventId) {
+        AgendaResponse agenda = agendaService.getAgendaByEvent(eventId);
         return ResponseEntity.ok(agenda);
     }
 
