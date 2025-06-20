@@ -57,8 +57,8 @@ public class EventService {
                     .setEventName(request.getEventName())
                     .build();
 
-            Integer value = greeterClientService.creaAgenda(createAgendaRequest);
-            if (value == 0) {
+            Boolean value = greeterClientService.creaAgenda(createAgendaRequest);
+            if (!value) {
                 eventRepository.delete(esaved);
                 throw new RuntimeException("Failed to create new event");
             }
