@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.checkerframework.checker.units.qual.t;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.eventhub.agenda_service.proto.CreateAgendaRequest;
 import com.eventhub.event_service.config.RabbitMQConfig;
@@ -39,7 +42,8 @@ public class EventService {
             return eventMapper.convert(eventRepository.findAll());
         } catch (DataAccessException dae) {
             log.error("Failed to get all events ", dae);
-            throw new RuntimeException("Failed to get all events");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Errore generico del server");
         }
     }
 
@@ -60,12 +64,14 @@ public class EventService {
             Boolean value = greeterClientService.creaAgenda(createAgendaRequest);
             if (!value) {
                 eventRepository.delete(esaved);
-                throw new RuntimeException("Failed to create new event");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "");
             }
             return esaved.getId();
         } catch (DataAccessException e) {
             log.error("Error creating new event: ", e);
-            throw new RuntimeException("Failed to create new event", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Errore generico del server");
         }
     }
 
@@ -73,7 +79,8 @@ public class EventService {
         try {
             Event event = eventRepository.findById(id).orElseThrow(() -> {
                 log.error("Event with id {} not found for update", id);
-                throw new RuntimeException("Event not found while updating");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Evento generico del server");
             });
 
             event.setEventName(request.getEventName());
@@ -90,15 +97,16 @@ public class EventService {
 
         } catch (Exception e) {
             log.error("Error updating event {}: ", id, e);
-            throw new RuntimeException("Failed to update event", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Errore generico del server");
         }
     }
 
     public void deleteEvent(String id) {
         try {
             Event event = eventRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Event not found while deleting"));
-
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                                  "Evento non trovato")); 
             List<Participant> partecipantsList = event.getPartecipantsList();
             String eventName = event.getEventName();
 
@@ -121,7 +129,8 @@ public class EventService {
             eventRepository.deleteById(id);
         } catch (Exception e) {
             log.error("Error deleting event {}: ", id, e);
-            throw new RuntimeException("Failed to delete event", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Errore generico del server");        
         }
     }
 
@@ -129,7 +138,8 @@ public class EventService {
         try {
             Event event = eventRepository.findById(id).orElseThrow(() -> {
                 log.error("Event with id {} not found for update", id);
-                throw new RuntimeException("Event not found while updating");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Evento non trovato");
             });
 
             List<Participant> partecipanti = event.getPartecipantsList();
@@ -141,7 +151,8 @@ public class EventService {
 
         } catch (DataAccessException dae) {
             log.error("Error add participand: ", dae);
-            throw new RuntimeException("Error add participand", dae);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Errore generico del server");
         }
     }
 }
