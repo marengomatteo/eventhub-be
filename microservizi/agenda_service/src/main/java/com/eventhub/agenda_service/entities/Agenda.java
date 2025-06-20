@@ -1,13 +1,10 @@
 package com.eventhub.agenda_service.entities;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -39,14 +36,7 @@ public class Agenda {
     @Field("sessions")
     private List<Sessione> sessions = new ArrayList<>();
 
-    @CreatedDate
-    @Field("created_at")
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Field("updated_at")
-    private LocalDateTime updatedAt;
-
     @Version
     private Long version;
+
 }
