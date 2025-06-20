@@ -80,7 +80,7 @@ public class EventService {
             Event event = eventRepository.findById(id).orElseThrow(() -> {
                 log.error("Event with id {} not found for update", id);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Evento generico del server");
+                    "Evento non trovato per l'aggiornamento");
             });
 
             event.setEventName(request.getEventName());
@@ -106,7 +106,7 @@ public class EventService {
         try {
             Event event = eventRepository.findById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                  "Evento non trovato")); 
+                                                  "Evento non trovato per l'eliminazione")); 
             List<Participant> partecipantsList = event.getPartecipantsList();
             String eventName = event.getEventName();
 
