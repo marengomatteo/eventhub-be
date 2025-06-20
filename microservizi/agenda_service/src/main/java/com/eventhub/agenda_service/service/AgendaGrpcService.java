@@ -32,14 +32,14 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
             agendaRepository.save(agenda);
 
             CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
-                    .setMessage(1)
+                    .setSuccess(true)
                     .build();
 
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } catch (Exception e) {
             CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
-                    .setMessage(0)
+                    .setSuccess(false)
                     .build();
 
             responseObserver.onNext(reply);
