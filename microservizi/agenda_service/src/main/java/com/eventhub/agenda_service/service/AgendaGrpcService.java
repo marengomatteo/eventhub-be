@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.eventhub.agenda_service.entities.Agenda;
 import com.eventhub.agenda_service.proto.AgendaGrpc;
 import com.eventhub.agenda_service.proto.CreateAgendaRequest;
@@ -44,7 +47,8 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
 
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
-            throw new RuntimeException("errore");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Errore interno al server" );  
         }
     }
 

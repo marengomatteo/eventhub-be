@@ -5,7 +5,9 @@ import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.eventhub.agenda_service.dto.AgendaRequest;
 import com.eventhub.agenda_service.dto.AgendaResponse;
@@ -32,7 +34,8 @@ public class AgendaService {
             return agenda.stream().map(ag -> agendaMapper.convert(ag)).toList();
         } catch (Exception e) {
             log.error("Error retrieving all agenda: {}", e.getMessage());
-            throw new RuntimeException("Failed to retrieve agenda for event", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Errore interno al server");  
         }
     }
 
@@ -40,14 +43,16 @@ public class AgendaService {
         try {
             Agenda agenda = agendaRepository.findByEventId(eventId).orElseThrow(() -> {
                 log.error("Agenda with event id {} not found", eventId);
-                throw new RuntimeException("Agenda not found");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Agenda non trovata per l'evento");
             });
             AgendaResponse agendaResponse = agendaMapper.convert(agenda);
 
             return agendaResponse;
         } catch (Exception e) {
             log.error("Error retrieving agenda for event with id {}: {}", eventId, e.getMessage());
-            throw new RuntimeException("Failed to retrieve agenda for event", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Errore interno al server");  
         }
     }
 
@@ -60,7 +65,8 @@ public class AgendaService {
 
         } catch (DataAccessException e) {
             log.error("Error creating new event: ", e);
-            throw new RuntimeException("Failed to create new event", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Errore interno al server");  
         }
     }
 
@@ -68,7 +74,8 @@ public class AgendaService {
         try {
             Agenda agenda = agendaRepository.findById(id).orElseThrow(() -> {
                 log.error("Agenda not found with id: {}", id);
-                throw new RuntimeException("Agenda not found with id: " + id);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Agenda non trovata");
             });
 
             LocalDate oldDay = agenda.getDay();
@@ -85,7 +92,8 @@ public class AgendaService {
 
         } catch (DataAccessException e) {
             log.error("Error updating agenda with id: {}", id, e);
-            throw new RuntimeException("Failed to update agenda", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Errore interno al server");  
         }
     }
 
@@ -106,14 +114,16 @@ public class AgendaService {
     public void deleteAgenda(String id) {
         try {
             Agenda a = agendaRepository.findById(id).orElseThrow(() -> {
-                log.error("Error creating new event: ");
-                throw new RuntimeException("Failed to create new event");
+                log.error("Agenda with id: {} not found for deletion", id);
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Errore interno al server");  
             });
             agendaRepository.delete(a);
 
         } catch (DataAccessException e) {
-            log.error("Error creating new event: ", e);
-            throw new RuntimeException("Failed to create new event", e);
+            log.error("Error deleting agenda with id: {}", id);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                "Errore interno al server");  
         }
     }
 }
