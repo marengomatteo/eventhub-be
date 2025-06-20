@@ -21,8 +21,6 @@ public interface AgendaMapper {
     @Mapping(source = "sessionsList", target = "sessions", qualifiedByName = "mapSessions")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
     Agenda parse(AgendaRequest request);
 
     @Named("mapSessions")
