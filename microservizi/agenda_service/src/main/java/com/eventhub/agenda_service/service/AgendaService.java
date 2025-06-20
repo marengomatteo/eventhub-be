@@ -36,17 +36,17 @@ public class AgendaService {
         }
     }
 
-    public AgendaResponse getAgendaByEvent(String id) {
+    public AgendaResponse getAgendaByEvent(String eventId) {
         try {
-            Agenda agenda = agendaRepository.findById(id).orElseThrow(() -> {
-                log.error("Agenda with event id {} not found", id);
+            Agenda agenda = agendaRepository.findByEventId(eventId).orElseThrow(() -> {
+                log.error("Agenda with event id {} not found", eventId);
                 throw new RuntimeException("Agenda not found");
             });
             AgendaResponse agendaResponse = agendaMapper.convert(agenda);
 
             return agendaResponse;
         } catch (Exception e) {
-            log.error("Error retrieving agenda for event with id {}: {}", id, e.getMessage());
+            log.error("Error retrieving agenda for event with id {}: {}", eventId, e.getMessage());
             throw new RuntimeException("Failed to retrieve agenda for event", e);
         }
     }
