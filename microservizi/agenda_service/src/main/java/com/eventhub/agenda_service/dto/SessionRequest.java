@@ -2,6 +2,7 @@ package com.eventhub.agenda_service.dto;
 
 import java.time.LocalDateTime;
 
+import com.eventhub.agenda_service.entities.Speaker;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +15,7 @@ import lombok.Data;
 public class SessionRequest {
 
     @NotBlank(message = "Speaker obbligatorio")
-    private String speaker;
+    private Speaker speaker;
 
     @NotBlank(message = "Titolo obbligatorio")
     private String title;

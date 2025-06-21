@@ -4,6 +4,7 @@ services:
     container_name: agenda-microservice
     ports:
       - "8084:8084"
+      - "9090:9090"
     environment:
       - springdoc.api-docs.path=/v3/api-docs
       - springdoc.swagger-ui.path=/swagger-ui.html

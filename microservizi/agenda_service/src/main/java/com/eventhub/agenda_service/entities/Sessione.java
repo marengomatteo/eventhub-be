@@ -16,7 +16,7 @@ public class Sessione {
 
     private String id = UUID.randomUUID().toString();
 
-    private String speaker;
+    private Speaker speaker;
 
     private String title;
 

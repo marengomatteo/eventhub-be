@@ -32,7 +32,7 @@ public class SessionService {
                     .orElseThrow(() -> {
                         log.error("Agenda not found with id: {}", agendaId);
                         return new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Agenda non trovata" );
+                                "Agenda non trovata");
                     });
 
             validateSessionDateWithAgenda(request, agenda.getDay());
@@ -69,7 +69,7 @@ public class SessionService {
                     .orElseThrow(() -> {
                         log.error("Session not found with id: {} in agenda: {}", sessionId, agendaId);
                         return new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            "Session dell'agenda non trovata");
+                                "Session dell'agenda non trovata");
                     });
 
             validateSessionDateWithAgenda(request, agenda.getDay());
@@ -98,7 +98,7 @@ public class SessionService {
                     .orElseThrow(() -> {
                         log.error("Agenda not found with id: {}", agendaId);
                         return new ResponseStatusException(HttpStatus.NOT_FOUND,
-                            "Agenda non trovata");
+                                "Agenda non trovata");
                     });
 
             boolean removed = agenda.getSessions().removeIf(s -> s.getId().equals(sessionId));
@@ -115,7 +115,7 @@ public class SessionService {
         } catch (DataAccessException e) {
             log.error("Database error deleting session {} from agenda {}", sessionId, agendaId, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "Errore generico del server");
+                    "Errore generico del server");
         }
     }
 
