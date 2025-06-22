@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: utenti-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: utenti-service
+  template:
+    metadata:
+      labels:
+        app: utenti-service
+    spec:
+      containers:
+      - name: utenti-service
+        image: utenti-service:latest
+        ports:
+        - containerPort: 8080
