@@ -16,6 +16,7 @@ services:
       - spring.rabbitmq.port=5673
       - spring.rabbitmq.username=guest
       - spring.rabbitmq.password=guest
+      - grpc.client.agenda-service.address=static://agenda-service:9090
     depends_on:
       - mongodb
       - event-rabbitmq
@@ -58,7 +59,7 @@ services:
 volumes:
   mongodb_data:
   rabbitmq-data:
-    name: rabbitmq-data
+    name: agenda-rabbitmq-data
 
 networks:
   event-network:

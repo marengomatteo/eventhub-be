@@ -13,10 +13,12 @@ import com.eventhub.agenda_service.proto.AgendaGrpc;
 import com.eventhub.agenda_service.proto.CreateAgendaRequest;
 import com.eventhub.agenda_service.proto.CreateAgendaResponse;
 import com.eventhub.agenda_service.repositories.AgendaRepository;
+import org.springframework.stereotype.Service;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 
+@Service
 @RequiredArgsConstructor
 public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
 

@@ -14,7 +14,7 @@ services:
       - spring.data.mongodb.uri=mongodb://mongodb:27017/agenda_service
       - spring.profiles.active=docker
       - spring.rabbitmq.host=agenda-rabbitmq
-      - spring.rabbitmq.port=5674
+      - spring.rabbitmq.port=5672
       - spring.rabbitmq.username=guest
       - spring.rabbitmq.password=guest
     depends_on:
@@ -40,8 +40,8 @@ services:
     image: rabbitmq:3-management
     container_name: agenda-rabbitmq
     ports:
-      - "5674:5674"
-      - "15674:15674"
+      - "5674:5672"
+      - "15674:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest

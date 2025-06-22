@@ -1,26 +1,24 @@
-FROM amazoncorretto:23-alpine AS build
-WORKDIR /workspace/app
+# Build stage
+FROM amazoncorretto:23 AS build
 
-# Copia del progetto nella directory di lavoro
-COPY mvnw .
-COPY .mvn .mvn
-COPY pom.xml .
-COPY src src
+# Installa Maven e protoc manualmente
+RUN yum update -y && \
+    yum install -y wget tar protobuf-compiler && \
+    wget https://archive.apache.org/dist/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz && \
+    tar -xzf apache-maven-3.9.6-bin.tar.gz -C /opt && \
+    ln -s /opt/apache-maven-3.9.6/bin/mvn /usr/bin/mvn && \
+    yum clean all
 
-# Garantisce che il mvnw script sia eseguibile
+WORKDIR /app
+COPY . .
 RUN chmod +x ./mvnw
-# Compila il jar
-RUN ./mvnw install -DskipTests
 
-# Utilizza JRE per l'immagine di runtime
+# Usa Maven installato o mvnw
+RUN ./mvnw clean package -DskipTests
+
+# Runtime stage
 FROM amazoncorretto:23-alpine-jdk
-VOLUME /tmp
-
-# Copia il jar dall'immagine di build
-COPY --from=build /workspace/app/target/*.jar app.jar
-
-# Espone la porta 8083
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8083
-
-# Esegue l'applicazione
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
