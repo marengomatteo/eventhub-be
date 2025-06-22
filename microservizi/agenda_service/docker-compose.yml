@@ -21,6 +21,7 @@ services:
       - mongodb
       - agenda-rabbitmq
     networks:
+      - microservices-network
       - agenda-network
       - rabbitmq-network
 
@@ -68,3 +69,5 @@ networks:
   rabbitmq-network:
     name: rabbitmq-network
     driver: bridge
+  microservices-network:
+    external: true
