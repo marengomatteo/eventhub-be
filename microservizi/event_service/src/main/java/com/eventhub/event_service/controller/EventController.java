@@ -17,6 +17,7 @@ import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
 import com.eventhub.event_service.entities.Participant;
 import com.eventhub.event_service.service.EventService;
+import com.eventhub.event_service.service.TicketClientService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EventController {
 
     private final EventService eventService;
+    private final TicketClientService ticketClientService;
 
     @GetMapping("")
     public ResponseEntity<List<EventResponse>> getAllEvents() {
@@ -42,7 +44,7 @@ public class EventController {
 
     @PatchMapping("/{id}/registration")
     public void addParticipant(@PathVariable("id") String id, @RequestBody Participant participant) {
-        eventService.addParticipant(id, participant);
+        ticketClientService.addParticipant(id, participant);
     }
 
     @PutMapping("/{id}")

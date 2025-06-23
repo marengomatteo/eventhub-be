@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
-import org.checkerframework.checker.units.qual.t;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -65,7 +64,7 @@ public class EventService {
             if (!value) {
                 eventRepository.delete(esaved);
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "");
+                        "");
             }
             return esaved.getId();
         } catch (DataAccessException e) {
@@ -80,7 +79,7 @@ public class EventService {
             Event event = eventRepository.findById(id).orElseThrow(() -> {
                 log.error("Event with id {} not found for update", id);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Evento non trovato per l'aggiornamento");
+                        "Evento non trovato per l'aggiornamento");
             });
 
             event.setEventName(request.getEventName());
@@ -106,7 +105,7 @@ public class EventService {
         try {
             Event event = eventRepository.findById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                  "Evento non trovato per l'eliminazione")); 
+                            "Evento non trovato per l'eliminazione"));
             List<Participant> partecipantsList = event.getPartecipantsList();
             String eventName = event.getEventName();
 
@@ -130,29 +129,8 @@ public class EventService {
         } catch (Exception e) {
             log.error("Error deleting event {}: ", id, e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Errore generico del server");        
-        }
-    }
-
-    public void addParticipant(String id, Participant participant) {
-        try {
-            Event event = eventRepository.findById(id).orElseThrow(() -> {
-                log.error("Event with id {} not found for update", id);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Evento non trovato");
-            });
-
-            List<Participant> partecipanti = event.getPartecipantsList();
-            partecipanti.add(participant);
-
-            event.setPartecipantsList(partecipanti);
-
-            eventRepository.save(event);
-
-        } catch (DataAccessException dae) {
-            log.error("Error add participand: ", dae);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Errore generico del server");
         }
     }
+
 }

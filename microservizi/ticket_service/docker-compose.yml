@@ -1,0 +1,73 @@
+services:
+  ticket-service:
+    build: .
+    container_name: ticket-microservice
+    ports:
+      - "8085:8085"
+      - "9091:9090"
+    environment:
+      - springdoc.api-docs.path=/v3/api-docs
+      - springdoc.swagger-ui.path=/swagger-ui.html
+      - springdoc.swagger-ui.disable-swagger-default-url=true
+      - springdoc.swagger-ui.server-url=http://localhost:8085
+      - spring.data.mongodb.database=ticket_service
+      - spring.data.mongodb.uri=mongodb://mongodb:27017/ticket_service
+      - spring.profiles.active=docker
+      - spring.rabbitmq.host=ticket-rabbitmq
+      - spring.rabbitmq.port=5672
+      - spring.rabbitmq.username=guest
+      - spring.rabbitmq.password=guest
+    depends_on:
+      - mongodb
+      - ticket-rabbitmq
+    networks:
+      - microservices-network
+      - ticket-network
+      - ticket-rabbit-network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: ticket-mongodb
+    ports:
+      - "27019:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=ticket_service
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - ticket-network
+
+  ticket-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: ticket-rabbitmq
+    ports:
+      - "5675:5672"
+      - "15675:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - ticket-network
+      - ticket-rabbit-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mongodb_data:
+  rabbitmq-data:
+    name: rabbitmq-data
+
+networks:
+  ticket-network:
+    name: ticket-network
+    driver: bridge
+  ticket-rabbit-network:
+    name: ticket-rabbit-network
+    driver: bridge
+  microservices-network:
+    external: true
