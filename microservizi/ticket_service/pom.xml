@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
+		<version>3.5.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.eventhub</groupId>
-	<artifactId>agenda_service</artifactId>
+	<artifactId>ticket_service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>agenda_service</name>
-	<description>Microservizio agenda</description>
+	<name>ticket_service</name>
+	<description>Ticket service</description>
 	<url/>
 	<licenses>
 		<license/>
