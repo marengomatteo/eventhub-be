@@ -17,6 +17,9 @@ docker compose -f microservizi/mail_service/docker-compose.yml up -d --build
 echo "Avvio agenda-service..."
 docker compose -f microservizi/agenda_service/docker-compose.yml up -d --build
 
+echo "Avvio ticket-service..."
+docker compose -f microservizi/ticket_service/docker-compose.yml up -d --build
+
 echo "Avvio event-service..."
 docker compose -f microservizi/event_service/docker-compose.yml up -d --build
 
