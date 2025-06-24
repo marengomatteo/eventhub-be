@@ -1,12 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: utenti-service
+  name: user-microservice
 spec:
   type: ClusterIP
   selector:
-    app: utenti-service
+    app: user-microservice
   ports:
-  - port: 8080
-    targetPort: 8080
-    # nodePort: 30001
+    - port: 8080
+      targetPort: 8080

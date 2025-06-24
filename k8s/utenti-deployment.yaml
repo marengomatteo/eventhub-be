@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: utenti-service
+  name: user-microservice
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: utenti-service
+      app: user-microservice
   template:
     metadata:
       labels:
-        app: utenti-service
+        app: user-microservice
     spec:
       containers:
-        - name: utenti-service
+        - name: user-microservice
           image: utenti-service-user-service:latest
           imagePullPolicy: IfNotPresent
           ports:
