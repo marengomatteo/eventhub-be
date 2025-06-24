@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: utenti-service
+  name: agenda-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: utenti-service
+      app: agenda-service
   template:
     metadata:
       labels:
-        app: utenti-service
+        app: agenda-service
     spec:
       containers:
-      - name: utenti-service
-        image: utenti-service:latest
+      - name: agenda-service
+        image: agenda-service:latest
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8080
+        - containerPort: 8084

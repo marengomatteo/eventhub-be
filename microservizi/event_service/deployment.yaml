@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: utenti-service
+  name: event-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: utenti-service
+      app: event-service
   template:
     metadata:
       labels:
-        app: utenti-service
+        app: event-service
     spec:
       containers:
-      - name: utenti-service
-        image: utenti-service:latest
+      - name: event-service
+        image: event-service:latest
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8080
+        - containerPort: 8083

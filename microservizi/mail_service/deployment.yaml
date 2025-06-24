@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: utenti-service
+  name: mail-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: utenti-service
+      app: mail-service
   template:
     metadata:
       labels:
-        app: utenti-service
+        app: mail-service
     spec:
       containers:
-      - name: utenti-service
-        image: utenti-service:latest
+      - name: mail-service
+        image: mail-service:latest
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8080
+        - containerPort: 8081
