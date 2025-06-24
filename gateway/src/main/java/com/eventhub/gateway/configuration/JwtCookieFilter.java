@@ -30,6 +30,7 @@ import reactor.core.publisher.Mono;
 public class JwtCookieFilter implements GlobalFilter, Ordered {
 
     private static final String LOGIN_PATH = "/authentication/signin";
+    private static final String GOOGLE_LOGIN_PATH = "/authentication/google";
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -43,7 +44,7 @@ public class JwtCookieFilter implements GlobalFilter, Ordered {
 
     private boolean shouldModifyResponse(ServerWebExchange exchange) {
         String path = exchange.getRequest().getPath().toString();
-        return path.contains(LOGIN_PATH);
+        return path.contains(LOGIN_PATH) || path.contains(GOOGLE_LOGIN_PATH);
     }
 
     private Mono<Void> modifyResponse(ServerWebExchange exchange, GatewayFilterChain chain) {

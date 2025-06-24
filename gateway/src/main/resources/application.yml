@@ -37,7 +37,7 @@ spring:
         - id: event-service-get-events-list
           uri: http://event-microservice:8083
           predicates:
-            - Path=/event-service/events
+            - Path=/event-service/events/list
             - Method=GET
           filters:
             - StripPrefix=1
@@ -59,6 +59,13 @@ spring:
           uri: http://agenda-microservice:8084
           predicates:
             - Path=/agenda-service/**
+          filters:
+            - StripPrefix=1
+            - Authentication
+        - id: ticket-service-route
+          uri: http://ticket-microservice:8085
+          predicates:
+            - Path=/ticket-service/**
           filters:
             - StripPrefix=1
             - Authentication
