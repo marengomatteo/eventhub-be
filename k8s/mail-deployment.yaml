@@ -13,8 +13,8 @@ spec:
         app: mail-service
     spec:
       containers:
-      - name: mail-service
-        image: mail-service:latest
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 8081
+        - name: mail-service
+          image: mail_service-mail-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081

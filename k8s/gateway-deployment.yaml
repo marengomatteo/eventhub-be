@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: agenda-service
+  name: gateway-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: agenda-service
+      app: gateway-service
   template:
     metadata:
       labels:
-        app: agenda-service
+        app: gateway-service
     spec:
       containers:
-        - name: agenda-service
-          image: agenda_service-agenda-service:latest
+        - name: gateway-service
+          image: gateway-gateway:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8084
+            - containerPort: 8082

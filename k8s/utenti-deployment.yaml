@@ -13,8 +13,8 @@ spec:
         app: utenti-service
     spec:
       containers:
-      - name: utenti-service
-        image: utenti-service:latest
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 8080
+        - name: utenti-service
+          image: utenti-service-user-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080

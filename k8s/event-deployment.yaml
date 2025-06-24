@@ -13,8 +13,8 @@ spec:
         app: event-service
     spec:
       containers:
-      - name: event-service
-        image: event-service:latest
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 8083
+        - name: event-service
+          image: event_service-event-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
