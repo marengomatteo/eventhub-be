@@ -17,6 +17,7 @@ services:
       - spring.rabbitmq.username=guest
       - spring.rabbitmq.password=guest
       - grpc.client.agenda-service.address=static://agenda-service:9090
+      - grpc.client.ticket-service.address=static://ticket-service:9091
     depends_on:
       - mongodb
       - event-rabbitmq
@@ -72,4 +73,3 @@ networks:
     driver: bridge
   microservices-network:
     external: true
-    
