@@ -7,6 +7,6 @@ spec:
   selector:
     app: gateway-service
   ports:
-    - port: 8085
-      targetPort: 8085
+    - port: 8082
+      targetPort: 8082
       nodePort: 30007
