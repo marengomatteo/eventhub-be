@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail-microservice
+  namespace: eventhub
+  labels:
+    app: mail-microservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mail-microservice
+  template:
+    metadata:
+      labels:
+        app: mail-microservice
+    spec:
+      containers:
+        - name: mail-service
+          image: mail_service-mail-service:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+              name: http
+          env:
+            - name: SERVER_PORT
+              value: "8081"
+          envFrom:
+            - configMapRef:
+                name: mail-microservice-config
+            - secretRef:
+                name: mail-microservice-secret
