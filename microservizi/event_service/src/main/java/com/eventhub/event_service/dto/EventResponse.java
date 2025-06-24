@@ -18,5 +18,6 @@ public class EventResponse {
     private String description;
     private int maxPartecipants;
     private String eventType;
+    private String userId;
 
 }

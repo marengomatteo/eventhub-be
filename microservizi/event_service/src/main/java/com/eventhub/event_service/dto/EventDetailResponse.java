@@ -23,5 +23,6 @@ public class EventDetailResponse {
     private int maxPartecipants;
     private List<Participant> partecipantsList;
     private String eventType;
+    private String userId;
 
 }
