@@ -22,6 +22,14 @@ spring:
             allowCredentials: true
             maxAge: 3600
       routes:
+        - id: user-service-me
+          uri: http://user-microservice:8080
+          predicates:
+            - Path=/user-service/authentication/me
+            - Method=GET
+          filters:
+            - StripPrefix=1
+            - Authentication
         - id: user-service-route
           uri: http://user-microservice:8080
           predicates:

@@ -3,6 +3,8 @@ package com.eventhub.utenti_service.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +58,14 @@ public class AuthenticationController {
         String id = authenticationService.signupUser(user);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MessageResponse(id));
+
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDataResponse> getUserData(@CookieValue(name = "accessToken") String token) {
+        UserDataResponse udr = authenticationService.getUserData(token);
+
+        return ResponseEntity.ok(udr);
 
     }
 
