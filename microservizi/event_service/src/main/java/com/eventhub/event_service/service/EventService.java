@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.eventhub.agenda_service.proto.CreateAgendaRequest;
 import com.eventhub.event_service.config.RabbitMQConfig;
+import com.eventhub.event_service.dto.EventDetailResponse;
 import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
 import com.eventhub.event_service.dto.rabbit.EmailRequest;
@@ -40,7 +41,16 @@ public class EventService {
         try {
             return eventMapper.convert(eventRepository.findAll());
         } catch (DataAccessException dae) {
-            log.error("Failed to get all events ", dae);
+
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Errore generico del server");
+        }
+    }
+
+    public List<EventDetailResponse> getUserEvents(String userId) {
+        try {
+            return eventMapper.convertToDetailResponse(eventRepository.findByUserId(userId));
+        } catch (DataAccessException dae) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Errore generico del server");
         }

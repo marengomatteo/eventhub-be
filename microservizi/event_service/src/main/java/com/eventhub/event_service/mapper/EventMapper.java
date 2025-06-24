@@ -5,6 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.eventhub.event_service.dto.EventDetailResponse;
 import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
 import com.eventhub.event_service.entities.Event;
@@ -19,4 +20,8 @@ public interface EventMapper {
     EventResponse convert(Event event);
 
     List<EventResponse> convert(List<Event> event);
+
+    EventDetailResponse convertToDetailResponse(Event event);
+
+    List<EventDetailResponse> convertToDetailResponse(List<Event> event);
 }

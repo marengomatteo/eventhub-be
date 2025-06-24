@@ -25,4 +25,6 @@ public class EventRequest {
 
     private String eventType;
 
+    private String userId;
+
 }
