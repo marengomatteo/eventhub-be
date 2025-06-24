@@ -10,16 +10,14 @@ services:
       - springdoc.swagger-ui.disable-swagger-default-url=true
       - springdoc.swagger-ui.server-url=http://localhost:8083
       - spring.data.mongodb.database=event_service
-      - spring.data.mongodb.uri=mongodb://mongodb:27017/event_service
-      - spring.profiles.active=docker
-      - spring.rabbitmq.host=event-rabbitmq
-      - spring.rabbitmq.port=5673
-      - spring.rabbitmq.username=guest
-      - spring.rabbitmq.password=guest
+      - spring.data.mongodb.uri=mongodb://event-mongodb:27017/event_service
+      - grpc.client.agenda-service.address=static://agenda-service:9090
+      - grpc.client.ticket-service.address=static://ticket-service:9091
     depends_on:
       - mongodb
       - event-rabbitmq
     networks:
+      - microservices-network
       - event-network
       - rabbitmq-network
 
@@ -33,6 +31,7 @@ services:
     volumes:
       - mongodb_data:/data/db
     networks:
+      - microservices-network
       - event-network
 
   event-rabbitmq:
@@ -64,6 +63,5 @@ networks:
   event-network:
     name: event-network
     driver: bridge
-  rabbitmq-network:
-    name: rabbitmq-network
-    driver: bridge
+  microservices-network:
+    external: true

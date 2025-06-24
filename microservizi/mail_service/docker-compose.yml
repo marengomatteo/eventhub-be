@@ -14,6 +14,7 @@ services:
       - spring.rabbitmq.username=guest
       - spring.rabbitmq.password=guest
     networks:
+      - microservices-network
       - mail-network
       - rabbitmq-network
     depends_on:
@@ -38,4 +39,5 @@ networks:
   rabbitmq-network:
     name: rabbitmq-network
     driver: bridge
+  microservices-network:
     external: true

@@ -1,0 +1,14 @@
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: eventhub-gateway
+    ports:
+      - "8082:8082"
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    external: true

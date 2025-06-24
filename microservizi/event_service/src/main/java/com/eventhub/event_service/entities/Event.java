@@ -46,4 +46,6 @@ public class Event {
     @Field
     private String eventType; // concerto/conferenza/altro
 
+    @Field
+    private String userId;
 }

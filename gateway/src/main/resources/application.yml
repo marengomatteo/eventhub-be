@@ -6,31 +6,77 @@ spring:
     name: eventhub-gateway
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          "[/**]":
+            allowedOrigins:
+              - "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 3600
       routes:
+        - id: user-service-me
+          uri: http://user-microservice:8080
+          predicates:
+            - Path=/user-service/authentication/me
+            - Method=GET
+          filters:
+            - StripPrefix=1
+            - Authentication
         - id: user-service-route
-          uri: http://localhost:8080
+          uri: http://user-microservice:8080
           predicates:
             - Path=/user-service/**
           filters:
             - StripPrefix=1
         - id: email-service-route
-          uri: http://localhost:8081
+          uri: http://mail-microservice:8081
           predicates:
             - Path=/email-service/**
           filters:
             - StripPrefix=1
-
-# Swagger configuration
-springdoc:
-  api-docs:
-    enabled: true
-    path: /v3/api-docs
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui.html
-    config-url: /v3/api-docs/swagger-config
-    url: /v3/api-docs
-
+        - id: event-service-get-events-list
+          uri: http://event-microservice:8083
+          predicates:
+            - Path=/event-service/events/list
+            - Method=GET
+          filters:
+            - StripPrefix=1
+        - id: event-service-route
+          uri: http://event-microservice:8083
+          predicates:
+            - Path=/event-service/**
+          filters:
+            - StripPrefix=1
+            - Authentication
+        - id: agenda-service-get-agenda-list
+          uri: http://agenda-microservice:8084
+          predicates:
+            - Path=/agenda-service/agenda/list
+            - Method=GET
+          filters:
+            - StripPrefix=1
+        - id: agenda-service-route
+          uri: http://agenda-microservice:8084
+          predicates:
+            - Path=/agenda-service/**
+          filters:
+            - StripPrefix=1
+            - Authentication
+        - id: ticket-service-route
+          uri: http://ticket-microservice:8085
+          predicates:
+            - Path=/ticket-service/**
+          filters:
+            - StripPrefix=1
+            - Authentication
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG

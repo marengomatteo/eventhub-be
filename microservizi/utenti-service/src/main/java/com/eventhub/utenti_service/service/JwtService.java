@@ -46,9 +46,9 @@ public class JwtService {
     @Value("${security.jwt.reset-password-expiration-time}")
     private long resetPasswordTokenExpirationTime;
 
-    public ResponseCookie generateJwtCookie(Utente userPrincipal) {
-        String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        return generateCookie(jwtAccessCookie, jwt, "/", jwtExpiration);
+    public String generateJwtCookie(Utente userPrincipal) {
+
+        return generateTokenFromUsername(userPrincipal.getUsername());
     }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {

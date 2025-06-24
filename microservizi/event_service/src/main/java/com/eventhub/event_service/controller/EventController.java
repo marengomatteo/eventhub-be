@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.eventhub.event_service.dto.EventDetailResponse;
 import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
 import com.eventhub.event_service.entities.Participant;
 import com.eventhub.event_service.service.EventService;
+import com.eventhub.event_service.service.TicketClientService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +30,17 @@ import lombok.extern.slf4j.Slf4j;
 public class EventController {
 
     private final EventService eventService;
+    private final TicketClientService ticketClientService;
 
-    @GetMapping("")
+    @GetMapping("/list")
     public ResponseEntity<List<EventResponse>> getAllEvents() {
         List<EventResponse> events = eventService.getAllEvents();
+        return ResponseEntity.ok(events);
+    }
+
+    @GetMapping("/{userId}/list")
+    public ResponseEntity<List<EventDetailResponse>> getUserEvents(@PathVariable("userId") String id) {
+        List<EventDetailResponse> events = eventService.getUserEvents(id);
         return ResponseEntity.ok(events);
     }
 
@@ -42,7 +51,7 @@ public class EventController {
 
     @PatchMapping("/{id}/registration")
     public void addParticipant(@PathVariable("id") String id, @RequestBody Participant participant) {
-        eventService.addParticipant(id, participant);
+        ticketClientService.addParticipant(id, participant);
     }
 
     @PutMapping("/{id}")

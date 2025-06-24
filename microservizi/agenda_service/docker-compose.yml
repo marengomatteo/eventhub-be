@@ -1,0 +1,41 @@
+services:
+  agenda-service:
+    build: .
+    container_name: agenda-microservice
+    ports:
+      - "8084:8084"
+      - "9090:9090"
+    environment:
+      - springdoc.api-docs.path=/v3/api-docs
+      - springdoc.swagger-ui.path=/swagger-ui.html
+      - springdoc.swagger-ui.disable-swagger-default-url=true
+      - springdoc.swagger-ui.server-url=http://localhost:8084
+      - spring.data.mongodb.database=agenda_service
+      - spring.data.mongodb.uri=mongodb://agenda-mongodb:27017/agenda_service
+    depends_on:
+      - mongodb
+    networks:
+      - microservices-network
+      - agenda-network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: agenda-mongodb
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=agenda_service
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - agenda-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  agenda-network:
+    name: agenda-network
+    driver: bridge
+  microservices-network:
+    external: true

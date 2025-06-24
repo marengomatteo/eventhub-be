@@ -1,0 +1,41 @@
+services:
+  ticket-service:
+    build: .
+    container_name: ticket-microservice
+    ports:
+      - "8085:8085"
+      - "9091:9090"
+    environment:
+      - springdoc.api-docs.path=/v3/api-docs
+      - springdoc.swagger-ui.path=/swagger-ui.html
+      - springdoc.swagger-ui.disable-swagger-default-url=true
+      - springdoc.swagger-ui.server-url=http://localhost:8085
+      - spring.data.mongodb.database=ticket_service
+      - spring.data.mongodb.uri=mongodb://ticket-mongodb:27017/ticket_service
+    depends_on:
+      - mongodb
+    networks:
+      - microservices-network
+      - ticket-network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: ticket-mongodb
+    ports:
+      - "27019:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=ticket_service
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - ticket-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  ticket-network:
+    name: ticket-network
+    driver: bridge
+  microservices-network:
+    external: true

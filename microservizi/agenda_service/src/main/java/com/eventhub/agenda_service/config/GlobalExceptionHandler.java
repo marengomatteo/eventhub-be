@@ -95,7 +95,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         @NotNull WebRequest request) {
                 Map<String, String> errors = new HashMap<>();
                 errors.put("error", ex.getReason());
-                // sendMail(ex, request);
                 ErrorResponse errorResponse = new ErrorResponse(
                                 new Date().toString(),
                                 ex.getStatusCode().value(),
@@ -104,5 +103,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                 request.getDescription(false));
                 return new ResponseEntity<ErrorResponse>(errorResponse, ex.getStatusCode());
         }
-        
 }

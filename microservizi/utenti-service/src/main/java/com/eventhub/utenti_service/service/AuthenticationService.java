@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.eventhub.utenti_service.configuration.RabbitMQConfig;
 import com.eventhub.utenti_service.dto.login.GoogleUserInfo;
 import com.eventhub.utenti_service.dto.login.LoginRequest;
+import com.eventhub.utenti_service.dto.login.UserDataResponse;
 import com.eventhub.utenti_service.dto.rabbit.EmailRequest;
 import com.eventhub.utenti_service.dto.signup.SignUpRequest;
 import com.eventhub.utenti_service.entities.EProvider;
@@ -40,11 +42,15 @@ public class AuthenticationService {
 
     private final UtenteRepository utenteRepository;
     private final UtenteMapper utenteMapper;
+    private final JwtService jwtService;
 
     private final AuthenticationManager authenticationManager;
     private final PasswordHasher passwordHasher;
 
     private final RabbitTemplate rabbitTemplate;
+
+    @Value("${security.jwt.secret-key}")
+    private String secretKey;
 
     @Transactional
     public boolean userExists(String email) {
@@ -197,6 +203,26 @@ public class AuthenticationService {
         } catch (DataAccessException e) {
             log.error("{} Errore durante l'autenticazione dell'utente {}", "login", user.getEmail());
             log.error("{}: {}", "login", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore generico del server");
+        }
+    }
+
+    public UserDataResponse getUserData(String token) {
+        try {
+
+            String email = jwtService.extractUserId(token);
+
+            Utente utente = loadUserByUsername(email);
+
+            return utenteMapper.convert(utente);
+
+        } catch (BadCredentialsException bce) {
+            log.error("{} Errore durante la get dati utente", "getUserData");
+            throw new BadCredentialsException(
+                    "Login fallito. Email o password invalide");
+        } catch (Exception e) {
+            System.err.println("Errore nel parsing del JWT: " + e.getMessage());
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Errore generico del server");
         }
     }
