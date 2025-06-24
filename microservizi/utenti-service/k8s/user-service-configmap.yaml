@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  spring.datasource.url: jdbc:mariadb://mariadb:3306/utenti_db?useSSL=false&allowPublicKeyRetrieval=true&connectTimeout=30000
+  spring.profiles.active: docker
+  spring.rabbitmq.host: rabbitmq
+  spring.rabbitmq.password: guest
+  spring.rabbitmq.port: "5672"
+  spring.rabbitmq.username: guest
+  springdoc.api-docs.path: /v3/api-docs
+  springdoc.swagger-ui.disable-swagger-default-url: "true"
+  springdoc.swagger-ui.path: /swagger-ui.html
+kind: ConfigMap
+metadata:
+  name: user-microservice-config
+  namespace: eventhub
