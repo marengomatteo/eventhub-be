@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: mail-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: mail-service
   ports:
   - port: 8081
     targetPort: 8081
-    nodePort: 30002
+    # nodePort: 30002

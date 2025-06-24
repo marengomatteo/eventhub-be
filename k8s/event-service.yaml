@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: event-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: event-service
   ports:
   - port: 8083
     targetPort: 8083
-    nodePort: 30004
+    # nodePort: 30004

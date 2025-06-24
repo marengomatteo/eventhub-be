@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: agenda-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: agenda-service
   ports:
   - port: 8084
     targetPort: 8084
-    nodePort: 30005
+    # nodePort: 30005

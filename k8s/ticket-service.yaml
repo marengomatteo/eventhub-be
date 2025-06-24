@@ -3,10 +3,10 @@ kind: Service
 metadata:
   name: ticket-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: ticket-service
   ports:
     - port: 8085
       targetPort: 8085
-      nodePort: 30006
+      # nodePort: 30006
