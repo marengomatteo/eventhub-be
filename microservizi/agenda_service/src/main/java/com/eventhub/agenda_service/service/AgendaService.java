@@ -1,7 +1,5 @@
 package com.eventhub.agenda_service.service;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -11,9 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.eventhub.agenda_service.dto.AgendaRequest;
 import com.eventhub.agenda_service.dto.AgendaResponse;
-import com.eventhub.agenda_service.dto.AgendaUpdateRequest;
 import com.eventhub.agenda_service.entities.Agenda;
-import com.eventhub.agenda_service.entities.Sessione;
 import com.eventhub.agenda_service.mapper.AgendaMapper;
 import com.eventhub.agenda_service.repositories.AgendaRepository;
 
@@ -35,7 +31,7 @@ public class AgendaService {
         } catch (Exception e) {
             log.error("Error retrieving all agenda: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Errore interno al server");  
+                    "Errore interno al server");
         }
     }
 
@@ -44,7 +40,7 @@ public class AgendaService {
             Agenda agenda = agendaRepository.findByEventId(eventId).orElseThrow(() -> {
                 log.error("Agenda with event id {} not found", eventId);
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Agenda non trovata per l'evento");
+                        "Agenda non trovata per l'evento");
             });
             AgendaResponse agendaResponse = agendaMapper.convert(agenda);
 
@@ -52,7 +48,7 @@ public class AgendaService {
         } catch (Exception e) {
             log.error("Error retrieving agenda for event with id {}: {}", eventId, e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Errore interno al server");  
+                    "Errore interno al server");
         }
     }
 
@@ -66,7 +62,7 @@ public class AgendaService {
         } catch (DataAccessException e) {
             log.error("Error creating new event: ", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Errore interno al server");  
+                    "Errore interno al server");
         }
     }
 
@@ -75,14 +71,14 @@ public class AgendaService {
             Agenda a = agendaRepository.findById(id).orElseThrow(() -> {
                 log.error("Agenda with id: {} not found for deletion", id);
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Errore interno al server");  
+                        "Errore interno al server");
             });
             agendaRepository.delete(a);
 
         } catch (DataAccessException e) {
             log.error("Error deleting agenda with id: {}", id);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Errore interno al server");  
+                    "Errore interno al server");
         }
     }
 }

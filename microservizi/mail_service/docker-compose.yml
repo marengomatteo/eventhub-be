@@ -1,6 +1,7 @@
 services:
-  mail-service:
+  mail-microservice:
     build: .
+    image: eventhub/mail-microservice
     container_name: mail-microservice
     ports:
       - "8081:8081"

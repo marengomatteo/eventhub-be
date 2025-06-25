@@ -1,5 +1,5 @@
 services:
-  ticket-service:
+  ticket-microservice:
     build: .
     image: eventhub/ticket-microservice
     container_name: ticket-microservice

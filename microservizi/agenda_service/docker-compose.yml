@@ -1,5 +1,5 @@
 services:
-  agenda-service:
+  agenda-microservice:
     build: .
     image: eventhub/agenda-microservice
     container_name: agenda-microservice
