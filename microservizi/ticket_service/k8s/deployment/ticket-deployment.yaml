@@ -22,6 +22,7 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 8085
+            - containerPort: 9091
           envFrom:
             - configMapRef:
-                name: ticket-microservice-config
+                name: ticket-config
