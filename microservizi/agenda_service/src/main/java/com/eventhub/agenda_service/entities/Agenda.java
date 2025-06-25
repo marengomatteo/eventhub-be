@@ -1,6 +1,6 @@
 package com.eventhub.agenda_service.entities;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class Agenda {
     private String eventName;
 
     @Field("day")
-    private LocalDate day;
+    private LocalDateTime day;
 
     @Field("sessions")
     private List<Sessione> sessions = new ArrayList<>();

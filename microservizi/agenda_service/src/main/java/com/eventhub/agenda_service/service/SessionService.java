@@ -1,6 +1,5 @@
 package com.eventhub.agenda_service.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -119,15 +118,15 @@ public class SessionService {
         }
     }
 
-    private void validateSessionDateWithAgenda(SessionRequest request, LocalDate agendaDay) {
+    private void validateSessionDateWithAgenda(SessionRequest request, LocalDateTime agendaDay) {
         if (request.getStartTime() != null &&
-                !request.getStartTime().toLocalDate().equals(agendaDay)) {
+                !request.getStartTime().toLocalDate().equals(agendaDay.toLocalDate())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Tempo inizio sessione deve essere nello stesso giorno dell'agenda");
         }
 
         if (request.getEndTime() != null &&
-                !request.getEndTime().toLocalDate().equals(agendaDay)) {
+                !request.getEndTime().toLocalDate().equals(agendaDay.toLocalDate())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Tempo fine sessione deve essere nello stesso giorno dell'agenda");
         }

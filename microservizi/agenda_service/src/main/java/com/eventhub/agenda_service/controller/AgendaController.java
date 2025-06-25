@@ -51,13 +51,6 @@ public class AgendaController {
         return ResponseEntity.ok(id);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateAgenda(@PathVariable("id") String id,
-            @Valid @RequestBody AgendaUpdateRequest agendaRequest) {
-        String data = agendaService.updateAgenda(id, agendaRequest);
-        return ResponseEntity.ok(data);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAgenda(@PathVariable("id") String id) {
         agendaService.deleteAgenda(id);
@@ -71,17 +64,6 @@ public class AgendaController {
 
         String sessionId = sessionService.addSessionToAgenda(agendaId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(sessionId);
-
-    }
-
-    @PutMapping("/{agendaId}/sessions/{sessionId}")
-    public ResponseEntity<String> updateSession(
-            @PathVariable String agendaId,
-            @PathVariable String sessionId,
-            @Valid @RequestBody SessionRequest request) {
-
-        sessionService.updateSession(agendaId, sessionId, request);
-        return ResponseEntity.ok("Session updated successfully");
 
     }
 

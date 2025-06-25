@@ -66,7 +66,7 @@ public class EventService {
             // chiamata grpc ad agenda
             CreateAgendaRequest createAgendaRequest = CreateAgendaRequest
                     .newBuilder()
-                    .setDay(request.getStartTime().toLocalDate().toString())
+                    .setDay(request.getStartTime().toString())
                     .setEventId(esaved.getId())
                     .setEventName(request.getEventName())
                     .build();
@@ -74,6 +74,7 @@ public class EventService {
             CreateAgendaResponse response = greeterClientService.creaAgenda(createAgendaRequest);
             if (!response.getSuccess()) {
                 eventRepository.delete(esaved);
+                log.error("Agenda creation failed");
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                         "Agenda creation failed");
             }

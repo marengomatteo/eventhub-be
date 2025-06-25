@@ -1,6 +1,7 @@
 services:
   ticket-service:
     build: .
+    image: eventhub/ticket-microservice
     container_name: ticket-microservice
     ports:
       - "8085:8085"

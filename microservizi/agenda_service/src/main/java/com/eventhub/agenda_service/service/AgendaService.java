@@ -1,6 +1,6 @@
 package com.eventhub.agenda_service.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -67,47 +67,6 @@ public class AgendaService {
             log.error("Error creating new event: ", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                 "Errore interno al server");  
-        }
-    }
-
-    public String updateAgenda(String id, AgendaUpdateRequest request) {
-        try {
-            Agenda agenda = agendaRepository.findById(id).orElseThrow(() -> {
-                log.error("Agenda not found with id: {}", id);
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    "Agenda non trovata");
-            });
-
-            LocalDate oldDay = agenda.getDay();
-            LocalDate newDay = request.getDay();
-
-            if (!oldDay.equals(newDay)) {
-                updateSessionsDates(agenda.getSessions(), oldDay, newDay);
-            }
-
-            agenda.setDay(newDay);
-
-            Agenda agendaSaved = agendaRepository.save(agenda);
-            return agendaSaved.getId();
-
-        } catch (DataAccessException e) {
-            log.error("Error updating agenda with id: {}", id, e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                "Errore interno al server");  
-        }
-    }
-
-    private void updateSessionsDates(List<Sessione> sessions, LocalDate oldDay, LocalDate newDay) {
-        for (Sessione session : sessions) {
-            if (session.getStartTime() != null) {
-                LocalTime startTime = session.getStartTime().toLocalTime();
-                session.setStartTime(newDay.atTime(startTime));
-            }
-
-            if (session.getEndTime() != null) {
-                LocalTime endTime = session.getEndTime().toLocalTime();
-                session.setEndTime(newDay.atTime(endTime));
-            }
         }
     }
 

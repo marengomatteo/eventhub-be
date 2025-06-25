@@ -1,6 +1,6 @@
 package com.eventhub.agenda_service.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -17,9 +17,11 @@ import org.springframework.stereotype.Service;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
 
     private final AgendaRepository agendaRepository;
@@ -42,6 +44,7 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } catch (Exception e) {
+            log.error("Error creating new agenda: ", e);
             CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
                     .setSuccess(false)
                     .build();
@@ -53,15 +56,11 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
         }
     }
 
-    private LocalDate stringToLocalDate(String dateString) {
+    private LocalDateTime stringToLocalDate(String dateString) {
         if (dateString == null || dateString.trim().isEmpty()) {
             return null;
         }
 
-        try {
-            return LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date format. Expected: yyyy-MM-dd, got: " + dateString, e);
-        }
+        return LocalDateTime.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }

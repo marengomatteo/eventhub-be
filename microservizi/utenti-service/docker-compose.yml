@@ -1,6 +1,7 @@
 services:
   user-service:
     build: .
+    image: eventhub/user-microservice
     container_name: user-microservice
     ports:
       - "8080:8080"
