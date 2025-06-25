@@ -1,0 +1,18 @@
+apiVersion: v1
+data:
+  server.port: "8085"
+  server.address: 0.0.0.0
+  spring.application.name: ticket_service
+  spring.data.mongodb.database: ticket_service
+  spring.data.mongodb.uri: mongodb://localhost:27019/ticket_service
+  springdoc.api-docs.path: /v3/api-docs
+  springdoc.swagger-ui.disable-swagger-default-url: "true"
+  springdoc.swagger-ui.path: /swagger-ui.html
+  springdoc.swagger-ui.server-url: http://ticket-microservice:8085
+  grpc.server.port: "9091"
+  grpc.server.enable-reflection: "true"
+  grpc.server.security.enabled: "false"
+kind: ConfigMap
+metadata:
+  name: ticket-microservice-config
+  namespace: eventhub

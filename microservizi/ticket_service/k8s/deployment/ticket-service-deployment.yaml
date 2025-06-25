@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticket-microservice
+  namespace: eventhub
+  labels:
+    app: ticket-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticket-microservice
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: ticket-microservice
+    spec:
+      containers:
+        - name: ticket-microservice
+          image: ticket_service-ticket-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8085
+          envFrom:
+            - configMapRef:
+                name: ticket-microservice-config
