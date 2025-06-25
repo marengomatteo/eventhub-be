@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: agenda-microservice
+  name: agenda-microservice
+  namespace: eventhub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agenda-microservice
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: agenda-microservice
+    spec:
+      containers:
+        - image: agenda_service-agenda-service:latest
+          name: agenda-microservice
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8084
+            - containerPort: 9090
+          envFrom:
+            - configMapRef:
+                name: agenda-config

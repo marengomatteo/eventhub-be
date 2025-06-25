@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agenda-config
+  namespace: eventhub
+data:
+  spring.application.name: agenda_service
+  server.address: 0.0.0.0
+  server.port: "8084"
+  spring.data.mongodb.database: agenda_service
+  spring.data.mongodb.uri: mongodb://mongodb:27017/agenda_service
+  springdoc.api-docs.path: /v3/api-docs
+  springdoc.swagger-ui.disable-swagger-default-url: "true"
+  springdoc.swagger-ui.path: /swagger-ui.html
+  springdoc.swagger-ui.server-url: http://agenda-microservice:8084
+  grpc.server.port: "9090"
+  grpc.server.enable-reflection: "true"
+  grpc.server.security.enabled: "false"
