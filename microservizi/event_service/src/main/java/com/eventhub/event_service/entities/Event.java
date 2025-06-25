@@ -24,10 +24,10 @@ public class Event {
     private String eventName;
 
     @Field
-    private LocalDateTime startDate;
+    private LocalDateTime startTime;
 
     @Field
-    private LocalDateTime endDate;
+    private LocalDateTime endTime;
 
     @Field
     private String location;
