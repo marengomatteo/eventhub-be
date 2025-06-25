@@ -39,8 +39,8 @@ public class Ticket {
     @Field("start_date")
     private String startDate;
 
-    @Field("start_time")
-    private String startTime;
+    @Field("location")
+    private String location;
 
     @Version
     private Long version;

@@ -19,7 +19,6 @@ import com.eventhub.event_service.dto.EventResponse;
 import com.eventhub.event_service.entities.Participant;
 import com.eventhub.event_service.service.EventService;
 import com.eventhub.event_service.service.TicketClientService;
-import com.google.rpc.context.AttributeContext.Response;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
