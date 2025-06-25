@@ -94,8 +94,8 @@ public class EventService {
             });
 
             event.setEventName(request.getEventName());
-            event.setStartDate(request.getStartTime());
-            event.setEndDate(request.getEndTime());
+            event.setStartTime(request.getStartTime());
+            event.setEndTime(request.getEndTime());
             event.setLocation(request.getLocation());
             event.setMaxPartecipants(request.getMaxPartecipants());
             event.setEventType(request.getEventType());
