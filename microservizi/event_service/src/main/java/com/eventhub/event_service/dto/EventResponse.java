@@ -13,8 +13,8 @@ public class EventResponse {
 
     private String id;
     private String eventName;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String location;
     private String description;
     private int maxPartecipants;
