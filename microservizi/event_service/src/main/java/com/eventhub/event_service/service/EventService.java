@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.eventhub.agenda_service.proto.CreateAgendaRequest;
+import com.eventhub.agenda_service.proto.CreateAgendaResponse;
 import com.eventhub.event_service.config.RabbitMQConfig;
 import com.eventhub.event_service.dto.EventDetailResponse;
 import com.eventhub.event_service.dto.EventRequest;
@@ -70,13 +71,13 @@ public class EventService {
                     .setEventName(request.getEventName())
                     .build();
 
-            Boolean value = greeterClientService.creaAgenda(createAgendaRequest);
-            if (!value) {
+            CreateAgendaResponse response = greeterClientService.creaAgenda(createAgendaRequest);
+            if (!response.getSuccess()) {
                 eventRepository.delete(esaved);
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "");
+                        "Agenda creation failed");
             }
-            return esaved.getId();
+            return response.getAgendaId();
         } catch (DataAccessException e) {
             log.error("Error creating new event: ", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,

@@ -11,8 +11,8 @@ services:
       - springdoc.swagger-ui.server-url=http://localhost:8083
       - spring.data.mongodb.database=event_service
       - spring.data.mongodb.uri=mongodb://event-mongodb:27017/event_service
-      - grpc.client.agenda-service.address=static://agenda-service:9090
-      - grpc.client.ticket-service.address=static://ticket-service:9091
+      - grpc.client.agenda-service.address=static://agenda-microservice:9090
+      - grpc.client.ticket-service.address=static://ticket-microservice:9091
     depends_on:
       - mongodb
     networks:

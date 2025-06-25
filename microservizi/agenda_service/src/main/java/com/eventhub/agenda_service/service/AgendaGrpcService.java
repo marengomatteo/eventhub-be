@@ -32,10 +32,11 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
             agenda.setEventId(request.getEventId());
             agenda.setDay(stringToLocalDate(request.getDay()));
             agenda.setSessions(new ArrayList<>());
-            agendaRepository.save(agenda);
+            Agenda agendaSaved = agendaRepository.save(agenda);
 
             CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
                     .setSuccess(true)
+                    .setAgendaId(agendaSaved.getId().toString())
                     .build();
 
             responseObserver.onNext(reply);
