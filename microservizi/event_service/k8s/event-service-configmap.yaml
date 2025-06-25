@@ -1,0 +1,29 @@
+apiVersion: v1
+data:
+  grpc.client.agenda-service.address: static://agenda-microservice:9090
+  grpc.client.agenda-service.keep-alive-time: 30s
+  grpc.client.agenda-service.keep-alive-timeout: 5s
+  grpc.client.agenda-service.keep-alive-without-calls: "true"
+  grpc.client.agenda-service.max-inbound-message-size: "4194304"
+  grpc.client.agenda-service.max-outbound-message-size: "4194304"
+  grpc.client.agenda-service.negotiation-type: plaintext
+  grpc.client.ticket-service.address: static://ticket-microservice:9091
+  grpc.client.ticket-service.keep-alive-time: 30s
+  grpc.client.ticket-service.keep-alive-timeout: 5s
+  grpc.client.ticket-service.keep-alive-without-calls: "true"
+  grpc.client.ticket-service.max-inbound-message-size: "4194304"
+  grpc.client.ticket-service.max-outbound-message-size: "4194304"
+  grpc.client.ticket-service.negotiation-type: plaintext
+  server.port: "8083"
+  spring.application.name: event_service
+  spring.data.mongodb.database: event_service
+  spring.data.mongodb.uri: mongodb://mongodb:27017/event_service
+  springdoc.api-docs.path: /v3/api-docs
+  springdoc.swagger-ui.disable-swagger-default-url: "true"
+  springdoc.swagger-ui.path: /swagger-ui.html
+  springdoc.swagger-ui.server-url: http://event-microservice:8083
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: event-microservice-config
+  namespace: eventhub

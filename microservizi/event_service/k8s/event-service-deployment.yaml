@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: eventhub
+  labels:
+    app: event-microservice
+  name: event-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-microservice
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: event-microservice
+    spec:
+      containers:
+        - image: event_service-event-service:latest
+          name: event-service-event-service
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8083
+          envFrom:
+            - configMapRef:
+                name: event-microservice-config
