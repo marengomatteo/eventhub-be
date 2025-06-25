@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
@@ -77,7 +78,11 @@ public class AuthenticationService {
 
             Utente u = utenteMapper.parse(request);
 
-            u.setRole(ERole.USER);
+            if (Strings.isBlank(request.getRole())) {
+                u.setRole(ERole.USER);
+            } else {
+                u.setRole(ERole.valueOf(request.getRole()));
+            }
             u.setPassword(null);
 
             if (request.getProvider().equals(EProvider.STATIC)) {

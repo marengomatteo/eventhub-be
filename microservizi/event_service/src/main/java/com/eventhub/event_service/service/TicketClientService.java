@@ -64,8 +64,7 @@ public class TicketClientService {
                 .setUserEmail(participant.getEmail())
                 .setEventId(event.getId())
                 .setEventName(event.getEventName())
-                .setStartDate(event.getStartDate())
-                .setStartTime(event.getTime())
+                .setStartDate(event.getStartDate().toString())
                 .build();
         return request;
     }

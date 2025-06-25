@@ -35,4 +35,6 @@ public class SignUpRequest {
 
     private String externalId;
 
+    private String role;
+
 }

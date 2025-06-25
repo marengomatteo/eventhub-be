@@ -29,7 +29,6 @@ services:
     volumes:
       - mongodb_data:/data/db
     networks:
-      - microservices-network
       - event-network
 
 volumes:

@@ -66,7 +66,7 @@ public class EventService {
             // chiamata grpc ad agenda
             CreateAgendaRequest createAgendaRequest = CreateAgendaRequest
                     .newBuilder()
-                    .setDay(request.getStartDate())
+                    .setDay(request.getStartTime().toLocalDate().toString())
                     .setEventId(esaved.getId())
                     .setEventName(request.getEventName())
                     .build();
@@ -94,9 +94,8 @@ public class EventService {
             });
 
             event.setEventName(request.getEventName());
-            event.setStartDate(request.getStartDate());
-            event.setEndDate(request.getEndDate());
-            event.setTime(request.getTime());
+            event.setStartDate(request.getStartTime());
+            event.setEndDate(request.getEndTime());
             event.setLocation(request.getLocation());
             event.setMaxPartecipants(request.getMaxPartecipants());
             event.setEventType(request.getEventType());
