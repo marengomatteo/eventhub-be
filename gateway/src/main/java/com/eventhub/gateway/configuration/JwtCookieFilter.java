@@ -105,14 +105,16 @@ public class JwtCookieFilter implements GlobalFilter, Ordered {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Strict")
+                .domain(".127.0.0.1.nip.io")
                 .path("/")
-                .maxAge(Duration.ofMinutes(15))
+                .maxAge(Duration.ofMinutes(60))
                 .build();
 
         ResponseCookie refreshHttpCookie = ResponseCookie.from("refreshToken", extractCookieValue(refreshCookie))
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Strict")
+                .domain(".127.0.0.1.nip.io")
                 .path("/")
                 .maxAge(Duration.ofDays(7))
                 .build();
