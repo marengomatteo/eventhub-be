@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class EventResponse {
 
     private String id;
+    private String eventImage;
     private String eventName;
     private LocalDateTime startTime;
     private LocalDateTime endTime;

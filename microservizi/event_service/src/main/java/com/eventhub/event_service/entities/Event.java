@@ -21,6 +21,9 @@ public class Event {
     private String id;
 
     @Field
+    private String eventImage;
+
+    @Field
     private String eventName;
 
     @Field

@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EventRequest {
 
+    @NotNull(message = "Immagine evento obbligatoria")
+    private String eventImage;
+
     @NotNull(message = "Nome evento obbligatorio")
     private String eventName;
 
