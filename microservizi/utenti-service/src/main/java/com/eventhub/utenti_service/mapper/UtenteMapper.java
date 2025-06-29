@@ -13,6 +13,11 @@ import com.eventhub.utenti_service.entities.Utente;
 @Mapper(componentModel = "spring")
 public interface UtenteMapper {
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "refreshTokens", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
     Utente parse(SignUpRequest signUpRequest);
 
     @Mapping(source = "id", target = "id", qualifiedByName = "uuidToString")
