@@ -1,7 +1,6 @@
 package com.eventhub.gateway.configuration;
 
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 
 import org.reactivestreams.Publisher;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -106,7 +105,6 @@ public class JwtCookieFilter implements GlobalFilter, Ordered {
                 .secure(true)
                 .sameSite("Strict")
                 .path("/")
-                .maxAge(Duration.ofMinutes(15))
                 .build();
 
         ResponseCookie refreshHttpCookie = ResponseCookie.from("refreshToken", extractCookieValue(refreshCookie))
@@ -114,7 +112,6 @@ public class JwtCookieFilter implements GlobalFilter, Ordered {
                 .secure(true)
                 .sameSite("Strict")
                 .path("/")
-                .maxAge(Duration.ofDays(7))
                 .build();
 
         response.addCookie(accessHttpCookie);

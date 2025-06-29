@@ -1,4 +1,4 @@
-package com.eventhub.utenti_service.controller;
+package com.eventhub.event_service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,5 +7,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class MessageResponse {
 
-    private String message;
+    private String response;
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.eventhub.utenti_service.dto.MessageResponse;
 import com.eventhub.utenti_service.dto.login.GoogleAuthRequest;
 import com.eventhub.utenti_service.dto.login.GoogleTokenResponse;
 import com.eventhub.utenti_service.dto.login.GoogleUserInfo;

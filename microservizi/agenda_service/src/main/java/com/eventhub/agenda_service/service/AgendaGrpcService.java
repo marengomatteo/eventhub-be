@@ -2,10 +2,10 @@ package com.eventhub.agenda_service.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.eventhub.agenda_service.entities.Agenda;
@@ -13,7 +13,6 @@ import com.eventhub.agenda_service.proto.AgendaGrpc;
 import com.eventhub.agenda_service.proto.CreateAgendaRequest;
 import com.eventhub.agenda_service.proto.CreateAgendaResponse;
 import com.eventhub.agenda_service.repositories.AgendaRepository;
-import org.springframework.stereotype.Service;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +46,7 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
             log.error("Error creating new agenda: ", e);
             CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
                     .setSuccess(false)
+                    .setAgendaId(null)
                     .build();
 
             responseObserver.onNext(reply);
