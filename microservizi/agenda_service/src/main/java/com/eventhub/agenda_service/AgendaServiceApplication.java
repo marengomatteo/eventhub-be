@@ -2,10 +2,10 @@ package com.eventhub.agenda_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@EntityScan({ "com.eventhub.agenda_service.entities" })
+@EnableMongoRepositories
 public class AgendaServiceApplication {
 
 	public static void main(String[] args) {
