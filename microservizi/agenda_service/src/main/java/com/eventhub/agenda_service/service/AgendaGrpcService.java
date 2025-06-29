@@ -1,11 +1,11 @@
 package com.eventhub.agenda_service.service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.eventhub.agenda_service.entities.Agenda;
@@ -13,13 +13,14 @@ import com.eventhub.agenda_service.proto.AgendaGrpc;
 import com.eventhub.agenda_service.proto.CreateAgendaRequest;
 import com.eventhub.agenda_service.proto.CreateAgendaResponse;
 import com.eventhub.agenda_service.repositories.AgendaRepository;
-import org.springframework.stereotype.Service;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
 
     private final AgendaRepository agendaRepository;
@@ -32,17 +33,20 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
             agenda.setEventId(request.getEventId());
             agenda.setDay(stringToLocalDate(request.getDay()));
             agenda.setSessions(new ArrayList<>());
-            agendaRepository.save(agenda);
+            Agenda agendaSaved = agendaRepository.save(agenda);
 
             CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
                     .setSuccess(true)
+                    .setAgendaId(agendaSaved.getId().toString())
                     .build();
 
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         } catch (Exception e) {
+            log.error("Error creating new agenda: ", e);
             CreateAgendaResponse reply = CreateAgendaResponse.newBuilder()
                     .setSuccess(false)
+                    .setAgendaId(null)
                     .build();
 
             responseObserver.onNext(reply);
@@ -52,15 +56,11 @@ public class AgendaGrpcService extends AgendaGrpc.AgendaImplBase {
         }
     }
 
-    private LocalDate stringToLocalDate(String dateString) {
+    private LocalDateTime stringToLocalDate(String dateString) {
         if (dateString == null || dateString.trim().isEmpty()) {
             return null;
         }
 
-        try {
-            return LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid date format. Expected: yyyy-MM-dd, got: " + dateString, e);
-        }
+        return LocalDateTime.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 }

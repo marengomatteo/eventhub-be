@@ -1,5 +1,6 @@
 package com.eventhub.event_service.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.eventhub.event_service.entities.Participant;
@@ -15,9 +16,8 @@ public class EventDetailResponse {
 
     private String id;
     private String eventName;
-    private String startDate;
-    private String endDate;
-    private String time;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String location;
     private String description;
     private int maxPartecipants;

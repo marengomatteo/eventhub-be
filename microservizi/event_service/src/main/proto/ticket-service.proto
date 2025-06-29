@@ -14,7 +14,7 @@ message CreateTicketRequest {
   string eventId = 5;
   string eventName = 6;
   string startDate = 7;
-  string startTime = 8;
+  string location = 8;
 }
 
 message CreateTicketResponse {

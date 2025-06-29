@@ -51,6 +51,7 @@ public class TicketClientService {
             }
 
         } catch (DataAccessException dae) {
+            dae.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Errore generico del server");
         }
@@ -64,8 +65,8 @@ public class TicketClientService {
                 .setUserEmail(participant.getEmail())
                 .setEventId(event.getId())
                 .setEventName(event.getEventName())
-                .setStartDate(event.getStartDate())
-                .setStartTime(event.getTime())
+                .setStartDate(event.getStartTime().toString())
+                .setLocation(event.getLocation())
                 .build();
         return request;
     }

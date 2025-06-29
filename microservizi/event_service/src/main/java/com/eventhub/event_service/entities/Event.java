@@ -1,5 +1,6 @@
 package com.eventhub.event_service.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -20,16 +21,16 @@ public class Event {
     private String id;
 
     @Field
+    private String eventImage;
+
+    @Field
     private String eventName;
 
     @Field
-    private String startDate;
+    private LocalDateTime startTime;
 
     @Field
-    private String endDate;
-
-    @Field
-    private String time;
+    private LocalDateTime endTime;
 
     @Field
     private String location;

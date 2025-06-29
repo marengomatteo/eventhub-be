@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.eventhub.event_service.dto.EventDetailResponse;
 import com.eventhub.event_service.dto.EventRequest;
 import com.eventhub.event_service.dto.EventResponse;
+import com.eventhub.event_service.dto.MessageResponse;
 import com.eventhub.event_service.entities.Participant;
 import com.eventhub.event_service.service.EventService;
 import com.eventhub.event_service.service.TicketClientService;
@@ -45,25 +46,30 @@ public class EventController {
     }
 
     @PostMapping("")
-    public void createEvent(@RequestBody EventRequest r) {
-        eventService.newEvent(r);
+    public ResponseEntity<MessageResponse> createEvent(@RequestBody EventRequest r) {
+        String id = eventService.newEvent(r);
+        return ResponseEntity.ok(new MessageResponse(id));
     }
 
     @PatchMapping("/{id}/registration")
-    public void addParticipant(@PathVariable("id") String id, @RequestBody Participant participant) {
+    public ResponseEntity<MessageResponse> addParticipant(@PathVariable("id") String id,
+            @RequestBody Participant participant) {
         ticketClientService.addParticipant(id, participant);
+        return ResponseEntity.ok(new MessageResponse("Participant added successfully"));
     }
 
     @PutMapping("/{id}")
-    public void updateEvent(
+    public ResponseEntity<MessageResponse> updateEvent(
             @PathVariable("id") String id,
             @RequestBody EventRequest r) {
         eventService.updateEvent(id, r);
+        return ResponseEntity.ok(new MessageResponse("Event updated successfully"));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEvent(@PathVariable("id") String id) {
+    public ResponseEntity<MessageResponse> deleteEvent(@PathVariable("id") String id) {
         eventService.deleteEvent(id);
+        return ResponseEntity.ok(new MessageResponse("Event deleted successfully"));
     }
 
 }

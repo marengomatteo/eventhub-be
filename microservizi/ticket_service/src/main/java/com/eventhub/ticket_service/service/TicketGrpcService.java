@@ -35,7 +35,7 @@ public class TicketGrpcService extends TicketGrpc.TicketImplBase {
             ticket.setEventName(request.getEventName());
             ticket.setEventId(request.getEventId());
             ticket.setStartDate(request.getStartDate());
-            ticket.setStartTime(request.getStartTime());
+            ticket.setLocation(request.getLocation());
 
             ticketRepository.save(ticket);
 

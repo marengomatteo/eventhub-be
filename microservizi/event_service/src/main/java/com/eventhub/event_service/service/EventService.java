@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.eventhub.agenda_service.proto.CreateAgendaRequest;
+import com.eventhub.agenda_service.proto.CreateAgendaResponse;
 import com.eventhub.event_service.config.RabbitMQConfig;
 import com.eventhub.event_service.dto.EventDetailResponse;
 import com.eventhub.event_service.dto.EventRequest;
@@ -65,18 +66,19 @@ public class EventService {
             // chiamata grpc ad agenda
             CreateAgendaRequest createAgendaRequest = CreateAgendaRequest
                     .newBuilder()
-                    .setDay(request.getStartDate())
+                    .setDay(request.getStartTime().toString())
                     .setEventId(esaved.getId())
                     .setEventName(request.getEventName())
                     .build();
 
-            Boolean value = greeterClientService.creaAgenda(createAgendaRequest);
-            if (!value) {
+            CreateAgendaResponse response = greeterClientService.creaAgenda(createAgendaRequest);
+            if (!response.getSuccess()) {
                 eventRepository.delete(esaved);
+                log.error("Agenda creation failed");
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "");
+                        "Agenda creation failed");
             }
-            return esaved.getId();
+            return response.getAgendaId();
         } catch (DataAccessException e) {
             log.error("Error creating new event: ", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -93,9 +95,8 @@ public class EventService {
             });
 
             event.setEventName(request.getEventName());
-            event.setStartDate(request.getStartDate());
-            event.setEndDate(request.getEndDate());
-            event.setTime(request.getTime());
+            event.setStartTime(request.getStartTime());
+            event.setEndTime(request.getEndTime());
             event.setLocation(request.getLocation());
             event.setMaxPartecipants(request.getMaxPartecipants());
             event.setEventType(request.getEventType());
