@@ -116,6 +116,7 @@ public class AuthenticationService {
             return savedUtente.getId().toString();
 
         } catch (DataAccessException e) {
+            e.printStackTrace();
             log.error("{} Errore durante il salvataggio dell'utente con email {}", "register", request.getEmail());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Errore generico del server");

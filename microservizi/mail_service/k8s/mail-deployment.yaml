@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: mail-service
-          image: mail_service-mail-service:latest
+          image: eventhub/mail-microservice:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081
