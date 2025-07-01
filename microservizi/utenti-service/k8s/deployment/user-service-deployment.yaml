@@ -17,8 +17,8 @@ spec:
     spec:
       containers:
         - name: user-microservice
-          image: utenti-service-user-service:latest
-          imagePullPolicy: Never
+          image: eventhub/user-microservice:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
