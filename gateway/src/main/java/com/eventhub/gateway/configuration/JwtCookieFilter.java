@@ -104,7 +104,7 @@ public class JwtCookieFilter implements GlobalFilter, Ordered {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Strict")
-                .domain(".127.0.0.1.nip.io")
+                .domain("localhost")
                 .path("/")
                 .build();
 
@@ -112,7 +112,7 @@ public class JwtCookieFilter implements GlobalFilter, Ordered {
                 .httpOnly(true)
                 .secure(true)
                 .sameSite("Strict")
-                .domain(".127.0.0.1.nip.io")
+                .domain("localhost")
                 .path("/")
                 .build();
 

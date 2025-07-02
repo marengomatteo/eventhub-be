@@ -18,8 +18,8 @@ spec:
         app: event-microservice
     spec:
       containers:
-        - image: event_service-event-service:latest
-          name: event-service-event-service
+        - image: eventhub/event-microservice:latest
+          name: event-microservice
           imagePullPolicy: Never
           ports:
             - containerPort: 8083

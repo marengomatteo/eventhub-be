@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: ticket-microservice
-          image: ticket_service-ticket-service:latest
+          image: eventhub/ticket-microservice:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 8085

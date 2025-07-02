@@ -17,7 +17,7 @@ spec:
         app: agenda-microservice
     spec:
       containers:
-        - image: agenda_service-agenda-service:latest
+        - image: eventhub/agenda-microservice:latest
           name: agenda-microservice
           imagePullPolicy: Never
           ports:
