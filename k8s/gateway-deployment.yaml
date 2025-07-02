@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: eventhub/gateway:latest
+          image: eventhub/gateway:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8082

@@ -77,6 +77,7 @@ public class TicketClientService {
 
             return response.getSuccess();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Errore generico del server");
         }
