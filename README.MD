@@ -9,6 +9,12 @@ Eseguire lo script per creare le immagini dei microservizi:
     ./build-all.sh
 ```
 
+Caricare le immagini in minikube:
+
+```bash
+    ./load-all-images.sh
+```
+
 ## Step 2: Applicare i manifest in ordine
 
 ```bash
