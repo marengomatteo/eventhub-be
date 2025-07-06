@@ -26,4 +26,4 @@ docker compose -f microservizi/event_service/docker-compose.yml up -d --build
 echo "Avvio gateway..."
 docker compose -f gateway/docker-compose.yml up -d --build
 
-echo "Servizi sono avviati!"
+echo "Servizi avviati!"
