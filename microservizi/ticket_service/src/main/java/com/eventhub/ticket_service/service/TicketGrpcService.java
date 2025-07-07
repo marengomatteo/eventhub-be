@@ -1,9 +1,5 @@
 package com.eventhub.ticket_service.service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
